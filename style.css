@@ -1,0 +1,105 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#lifeTotal {
+    font-size: 2rem;
+    margin: 20px 0;
+}
+
+button {
+	width: 30%;
+	border-radius: 15px;
+	border: 1px solid #000;
+	font-size: 5em;
+	font-weight: bold;
+	text-align: center;
+    cursor: pointer;
+    background-color: #ddd;
+}
+
+button:hover {
+    background-color: #aaa;
+}
+
+.playmat {
+	background-color: #ddd;
+	border-radius: 15px;
+	border: 1px solid #000;
+	width: 300px;
+	padding-bottom: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.counters {
+	width: 12%;
+	margin: 10px;
+	float: left;
+}
+
+.player {
+	margin-top: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.commander {
+	width: 12%;
+	margin: 10px;
+	float: right;
+}
+
+
+.clear {
+	clear: both;
+}
+
+
+
+#counter {
+    position: relative;
+    overflow: hidden;
+	height: 5em;
+	padding: 20px;
+}
+
+#decrease, #increase {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    cursor: pointer;
+}
+
+#decrease {
+    left: 0;
+}
+
+#increase {
+    right: 0;
+}
+
+#lifeTotal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -75%);
+    font-size: 5rem;
+    pointer-events: none; /* Makes the lifeTotal non-interactive */
+}
