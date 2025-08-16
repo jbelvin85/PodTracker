@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Tooling:** Created `init-project.sh` script to automate initial project setup (dependency installation, Prisma client generation, .env file creation).
 - **Tech Stack:** Established the core backend stack, including Express for the server, Prisma for the ORM, TypeScript for the language, and Zod for data validation.
 - **Dependencies:** Added the `dotenv` package to manage environment variables for testing.
 - **Configuration:** Created the `.env.test` file to provide a separate database and JWT secret for the testing environment.
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Testing:** Configured an isolated PostgreSQL container (`test-db`) and environment (`.env.test`) for backend testing.
 
 ### Changed
+- **Documentation:** Corrected duplication error in `README.md` and updated to reflect current project status, tech stack, and roadmap details.
 - **Testing:** Identified pending Docker installation as the root cause of database connection errors during test execution.
 - **Testing:** Configured Jest to load environment variables from `.env.test` using a setup file (`src/tests/setup.ts`). This was done by adding the `setupFiles` property to the `jest` configuration in `package.json`.
 - **Configuration:** Updated `package.json` to specify the location of the Prisma schema file. This simplifies running Prisma commands.

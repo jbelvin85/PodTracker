@@ -8,7 +8,7 @@ A modern, containerized PWA for tracking Magic: The Gathering Commander games, d
 
 **Current Phase:** `Phase 1: Backend & Database Foundation`
 
-The project is currently focused on building the core API, database schema, and user authentication systems. The foundational Docker environment and testing infrastructure are complete.
+The project is currently focused on building the core API, database schema, and user authentication systems. The foundational Docker environment and testing infrastructure are in place, but full test execution is pending the completion of Docker installation.
 
 ---
 
@@ -27,7 +27,7 @@ The goal of PodTracker is to provide a complete toolkit for Commander players:
 | Role          | Technology                                       |
 |---------------|--------------------------------------------------|
 | **Frontend**  | React, Vite, SWR, Tailwind CSS                   |
-| **Backend**   | Node.js, Express, Zod                            |
+| **Backend**   | Node.js, Express, TypeScript, Zod                |
 | **Database**  | PostgreSQL, Prisma ORM                           |
 | **Auth**      | JSON Web Tokens (JWT)                            |
 | **Testing**   | Jest, Supertest                                  |
@@ -67,26 +67,27 @@ The application services will be available at the following local addresses:
 - [ ] **Phase 1: Backend & Database Foundation** *(In Progress)*
   - [x] Establish Docker Environment & Services
   - [x] Define Initial Database Schema (`User`, `Deck`, `Pod`)
-  - [x] Configure Isolated Test Environment
+  - [x] Configure Isolated Test Environment (Test execution pending Docker installation)
   - [ ] Implement User Authentication (JWT)
   - [ ] Build Core CRUD APIs
 
 - [ ] **Phase 2: Core Frontend Implementation**
   - [ ] Set up UI Framework, Routing, and Layout
   - [ ] Build Frontend Authentication Flow
-  - [ ] Implement Views for Decks and Pods
-  - [ ] Create Forms for Data Management
+  - [ ] Data Display: Build the primary views for displaying a user's decks and pods.
+  - [ ] Data Management: Implement forms and components for creating and editing decks and pods, connecting them to the backend API via SWR.
 
 - [ ] **Phase 3: The Gameplay Loop**
-  - [ ] Develop Game Setup Logic
-  - [ ] Implement Live Game Tracking UI
-  - [ ] Finalize Game Conclusion and Saving
+  - [ ] Game Setup: Develop the UI and backend logic for creating a new game from a pod of players and their chosen decks.
+  - [ ] Live Game Tracking: Implement the interface for tracking life totals, commander damage, and other in-game events.
+  - [ ] Game Conclusion: Finalize the logic for ending a game, determining a winner, and saving the results.
 
 - [ ] **Phase 4: Expansion, Analytics & Polish**
-  - [ ] Create Player Statistics Dashboards
-  - [ ] Implement PWA Offline Features
-  - [ ] Add Social/Chat Features
-  - [ ] Prepare for Production Deployment
+  - [ ] Player Statistics: Create dashboards and views to analyze match history, deck performance, and win/loss rates.
+  - [ ] PWA Features: Implement service workers for offline capabilities and add a web app manifest for "install to homescreen" functionality.
+  - [ ] Social Features: Implement pod-based group chat and direct messaging.
+  - [ ] UI Polish: Refine the user interface and experience based on user feedback.
+  - [ ] Deployment: Prepare the application for a production environment.
 
 ## 📚 Project Documentation
 
