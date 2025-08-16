@@ -24,10 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Documentation:** Corrected duplication error in `README.md` and updated to reflect current project status, tech stack, and roadmap details.
-- **Testing:** Identified pending Docker installation as the root cause of database connection errors during test execution.
 - **Testing:** Configured Jest to load environment variables from `.env.test` using a setup file (`src/tests/setup.ts`). This was done by adding the `setupFiles` property to the `jest` configuration in `package.json`.
 - **Configuration:** Updated `package.json` to specify the location of the Prisma schema file. This simplifies running Prisma commands.
-- **Project Focus:** Clarified project direction, confirming the application is for Magic: The Gathering, not podcasts. The `Pod` in "PodTracker" refers to a playgroup.
 - **DB Schema:** Added `onDelete` referential actions (`Cascade` for Decks, `Restrict` for Pod Admins) to enforce data integrity rules at the database level.
 - **Documentation:** Expanded the "Features" list in `README.md` to provide greater detail on the gameplay loop and match history capabilities.
 - **Documentation:** Updated `GOALS.md` and `SUMMARY.md` to align with the newly detailed feature set.

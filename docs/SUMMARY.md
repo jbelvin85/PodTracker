@@ -57,5 +57,3 @@ PodTracker follows a standard three-tier web architecture, containerized for con
 - **Web Server / Reverse Proxy:** Nginx
 - **Future Scalability:** Potential migration to Kubernetes for larger-scale deployments.
 - **Goal:** A portable, reproducible, and scalable application environment.
-
-### **Current State:** An incomplete beta version exists in the file `@PodTracker(old).zip`.
