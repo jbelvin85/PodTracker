@@ -21,7 +21,13 @@ if ! docker compose version &> /dev/null; then
     exit 1
 fi
 
-# --- 2. Define Default Environment Variables ---
+# --- 2. Set Script Permissions ---
+echo "2. Setting executable permissions for shell scripts..."
+chmod +x ./scripts/*.sh
+echo "   - Permissions set for .sh files in scripts/."
+
+
+# --- 3. Define Default Environment Variables ---
 # These will be written to the root .env file and used by docker-compose
 # and to generate other .env files.
 export POSTGRES_USER=${POSTGRES_USER:-postgres}
@@ -34,8 +40,8 @@ export FRONTEND_PORT=${FRONTEND_PORT:-5173}
 export JWT_SECRET=${JWT_SECRET:-"a-super-secret-jwt-secret-for-development"}
 export TEST_JWT_SECRET=${TEST_JWT_SECRET:-"a-super-secret-jwt-secret-for-testing"}
 
-# --- 3. Create root .env file for Docker Compose ---
-echo "2. Setting up root .env file for Docker Compose..."
+# --- 4. Create root .env file for Docker Compose ---
+echo "3. Setting up root .env file for Docker Compose..."
 if [ ! -f "./.env" ]; then
   cat > ./.env <<EOF
 # --- Docker Compose Environment Variables ---
@@ -56,8 +62,8 @@ else
   echo "   - ./.env already exists. Skipping."
 fi
 
-# --- 4. Create application-specific .env files ---
-echo "3. Setting up application environment files..."
+# --- 5. Create application-specific .env files ---
+echo "4. Setting up application-specific environment files..."
 if [ ! -f "./backend/.env" ]; then
   # Note: Inside Docker, the backend connects to the 'db' service on the default postgres port 5432.
   cat > ./backend/.env <<EOF
@@ -86,12 +92,12 @@ else
   echo "   - ./.env.test already exists. Skipping."
 fi
 
-# --- 5. Install Node.js Dependencies ---
-echo "4. Installing Node.js dependencies..."
+# --- 6. Install Node.js Dependencies ---
+echo "5. Installing Node.js dependencies..."
 npm install
 
-# --- 6. Generate Prisma Client ---
-echo "5. Generating Prisma Client..."
+# --- 7. Generate Prisma Client ---
+echo "6. Generating Prisma Client..."
 npx prisma generate
 
 echo ""

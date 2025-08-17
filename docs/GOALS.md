@@ -1,5 +1,9 @@
 # PodTracker Project Goals
 
+## Current Task
+
+- **Documentation:** Refine the `DIRECTIVE.md` file to establish a clearer, more structured format for AI collaboration.
+
 This document outlines the development goals for recreating and expanding upon the original PodTracker application. Our objective is to build a modern, robust, and scalable PWA using the technology stack defined in `docs/SUMMARY.md`.
 
 ## Guiding Principles
@@ -24,6 +28,7 @@ The goal of this phase is to build the core data structures and API endpoints th
   - **[x]** Add Zod validation for auth endpoints.
   - **[x]** Add JWT-based route protection middleware.
 - **[ ] Core CRUD APIs:** Create and test the API endpoints for managing Users, Decks, and Pods.
+- **[x] Tooling & DX:** Establish helper scripts (`git-pr.sh`, `deploy.sh`) to streamline common development workflows like preparing pull requests and deploying the local environment.
 - **[x] Testing Environment:** Establish a robust testing setup for the backend using Jest and Supertest. (Test database infrastructure configured. **Note: Test execution is currently blocked by pending Docker installation.**).
 
 ### Phase 2: Core Frontend Implementation

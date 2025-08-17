@@ -50,11 +50,8 @@ chmod +x ./scripts/*.sh
 
 ### 2. Running the Application
 
-Use Docker Compose to build the images and start all the services.
+Use ./scripts/deploy.sh to launch Docker Compose to build the images and start all the services.
 
-```bash
-docker-compose up --build
-```
 
 The application services will be available at the following local addresses:
 
@@ -63,7 +60,17 @@ The application services will be available at the following local addresses:
 
 *Note: These ports are the defaults and can be configured in the root `.env` file after running the initialization script.*
 
-## 🗺️ Project Roadmap
+### 3. Developer Workflow Scripts
+
+The `scripts/` directory contains helpers for common development tasks:
+
+- **`./scripts/git-pr.sh [base-branch]`**: Prepares your current feature branch for a pull request. It fetches the latest changes, interactively rebases your branch onto the target branch (default: `main`), and force-pushes with a lease. This ensures a clean, linear history.
+- **`./scripts/deploy.sh`**: A convenience script that runs `docker-compose up --build`.
+- **`./scripts/get_timestamp.sh` / `.ps1`**: Returns a standardized timestamp string (`YYYY-MM-DD-HH-MM-SS`) for use in other scripts.
+
+Make sure scripts are executable by running `chmod +x ./scripts/*.sh`.
+
+## 4. Project Roadmap
 
 *For a more detailed breakdown of the tasks in each phase, see [docs/GOALS.md](./docs/GOALS.md).*
 

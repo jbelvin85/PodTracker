@@ -5,25 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### 2025-08-17
-- **Tooling(git):** Created `scripts/git-pr.sh` and `scripts/git-pr.ps1` to streamline the process of preparing branches for pull requests on Debian and Windows systems.
-- **Tooling(deploy):** Enhanced `deploy.sh` with verbose logging (`set -x`), pre-flight directory checks, and explicit error handling to improve debugging of Docker build failures.
-- **Fix(deploy):** Corrected `docker-compose.yml` to specify an explicit build context for the `backend` service, resolving a `Dockerfile` location error during deployment.
+## [Unreleased]
+### Added
+- **Tooling:** Created `get_timestamp.sh` and `get_timestamp.ps1` helper scripts to generate a standardized timestamp string (`YYYY-MM-DD-HH-MM-SS`).
 
-## [0.1.3]
+### Changed
+- **Tooling(setup):** The `setup.sh` script now automatically makes all `.sh` scripts in the `scripts/` directory executable.
+- **Documentation:** Refactored `docs/DIRECTIVE.md` into a clearer, more structured format to improve AI collaboration workflow. This includes defining a persona, core objective, workflow, and explicit documentation rules.
+
+---
+
+## [0.1.4] - 2024-08-18
 ### Commit Summary
 - fix(deploy)
 ### Commit Description
-- Resolved a deployment failure by creating a placeholder frontend service. This allows the Docker environment to build and run successfully during early backend-focused development phases, unblocking further work on the API.
+- Enhanced the `git-pr.sh` script with a more robust and user-friendly interface. This improves the developer workflow by preventing common errors and clarifying the script's actions.
+
+### Changed
+- **Tooling(git):** Updated `git-pr.sh` to include color-coded output, pre-flight checks for uncommitted changes, a confirmation prompt before execution, and better error handling for rebase conflicts.
+
+---
+
+## [0.1.3] - 2024-08-18
+### Commit Summary
+- fix(deploy)
+### Commit Description
+- Resolved deployment failures and improved developer tooling. This release introduces helper scripts for pull requests, enhances the deployment script, and adds placeholders to ensure the Docker environment builds successfully during early backend-focused development.
 
 ### Added
 - **Tooling:** Created a placeholder `frontend/Dockerfile` to ensure the frontend service can be built by Docker Compose before the React application is implemented.
+- **Tooling(git):** Created `scripts/git-pr.sh` and `scripts/git-pr.ps1` to streamline the process of preparing branches for pull requests on Debian and Windows systems.
 
 ### Changed
 - **Configuration:** Removed the obsolete `version` attribute from `docker-compose.yml` to align with modern Docker Compose standards.
+- **Tooling(deploy):** Enhanced `deploy.sh` with verbose logging (`set -x`), pre-flight directory checks, and explicit error handling to improve debugging of Docker build failures.
 
 ### Fixed
 - **Deployment:** Corrected a "path not found" error in `deploy.sh` by providing the necessary `frontend/` directory and Dockerfile for the `frontend` service build context.
+- **Deployment:** Corrected `docker-compose.yml` to specify an explicit build context for the `backend` service, resolving a `Dockerfile` location error during deployment.
+
+---
 
 ## [0.1.2]
 ### Commit Summary
