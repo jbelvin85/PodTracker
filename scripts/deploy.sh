@@ -3,10 +3,13 @@
 echo "--- Deploying PodTracker Application ---"
 
 # Exit immediately if a command exits with a non-zero status.
+# Print each command to stdout before executing it.
 set -e
+set -x
 
 # Navigate to the project root directory
 cd "$(dirname "$0")/.."
+echo "--- CWD: $(pwd) ---"
 
 # Check for .env file to ensure setup has been run
 if [ ! -f "./.env" ]; then
@@ -26,11 +29,17 @@ else
 fi
 
 # --- 1. Start Docker Services ---
-echo "1. Building and starting Docker containers in the background..."
-docker compose up --build -d
+echo "1. Verifying backend Dockerfile existence..."
+ls -la ./backend
+
+echo "2. Building and starting Docker containers in the background..."
+if ! docker compose up --build -d; then
+    echo "--- ERROR: Docker Compose build failed. ---" >&2
+    exit 1
+fi
 
 # --- 2. Wait for Databases to be Ready ---
-echo "2. Waiting for databases to become available..."
+echo "3. Waiting for databases to become available..."
 
 wait_for_db() {
     local port=$1
@@ -51,11 +60,11 @@ wait_for_db ${DB_PORT} "Main DB"
 wait_for_db ${TEST_DB_PORT} "Test DB"
 
 # --- 3. Run Database Migrations ---
-echo "3. Applying database migrations..."
+echo "4. Applying database migrations..."
 npx prisma migrate dev --name init
 
 # --- 4. Run Tests to Verify Setup ---
-echo "4. Running backend tests to verify the environment..."
+echo "5. Running backend tests to verify the environment..."
 npm test
 
 echo ""

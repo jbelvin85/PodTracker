@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### 2025-08-17
+- **Tooling(deploy):** Enhanced `deploy.sh` with verbose logging (`set -x`), pre-flight directory checks, and explicit error handling to improve debugging of Docker build failures.
+- **Fix(deploy):** Corrected `docker-compose.yml` to specify an explicit build context for the `backend` service, resolving a `Dockerfile` location error during deployment.
+
 ## [0.1.3]
 ### Commit Summary
 - fix(deploy)
