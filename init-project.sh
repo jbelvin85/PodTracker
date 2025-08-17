@@ -5,6 +5,19 @@ echo "--- Initializing PodTracker Project ---"
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
+# --- 0. Check for prerequisites ---
+echo "1. Checking for prerequisites (Docker)..."
+if ! [ -x "$(command -v docker)" ]; then
+  echo "Error: docker is not installed. Please install Docker Engine." >&2
+  exit 1
+fi
+
+# Use 'docker compose' (with a space) which is the modern syntax
+if ! docker compose version &> /dev/null; then
+    echo "Error: docker compose is not available. Please install the Docker Compose plugin." >&2
+    exit 1
+fi
+
 # --- 1. Define Default Environment Variables ---
 # These will be written to the root .env file and used by docker-compose
 # and to generate other .env files.
