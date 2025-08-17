@@ -20,6 +20,9 @@ fi
 # Source the .env file to get port variables
 export $(grep -v '^#' .env | xargs)
 
+# Source the backend/.env file for DATABASE_URL for Prisma migrations
+export $(grep -v '^#' backend/.env | xargs)
+
 if ! command -v nc &> /dev/null; then
     echo "Warning: 'nc' (netcat) could not be found. The script will use a fixed delay to wait for the database." >&2
     echo "For a more reliable startup, please install netcat (e.g., 'sudo apt-get install netcat')." >&2
