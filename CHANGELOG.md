@@ -5,10 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
+## [0.1.1]
 ### Commit Summary
+- security
+### Commit Description
+- Implemented JWT-based route protection middleware to secure API endpoints. Added global type definitions for the Express Request object to include authenticated user data, ensuring type-safety across the application.
 
+### Added
+- **Architecture:** Created JWT protection middleware (`src/middleware/protect.ts`) to secure routes.
+- **Architecture:** Added Express type declarations (`src/types/express/index.d.ts`) to support attaching authenticated user data to requests.
+
+## [0.1.1]
+### Commit Summary
+- deploy
+### Commit Description
 - Centralized environment configuration, improved test setup, and updated documentation.
 - Implemented robust input validation for authentication endpoints using Zod.
 

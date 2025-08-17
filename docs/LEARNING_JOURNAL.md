@@ -122,6 +122,18 @@ Zod is the **mana cost for our API**. It's a library that lets us define the exa
 
 By using Zod, we ensure that every "spell" cast on our API stack is legal before we even begin to resolve it.
 
+### Part 5: Express Middleware - Instants and Triggered Abilities
+
+**What is it?** In Magic, the "stack" is where the real game is played. You cast a spell, and your opponent can respond with an Instant before your spell resolves. They might try to counter it, or maybe they'll draw a card. These actions happen *in between* you casting the spell and the spell actually doing its thing.
+
+Express Middleware functions are the **Instants of our API**. When a request (a spell) is sent to one of our routes, it doesn't go directly to the final controller function. Instead, it goes through a chain of middleware. Each middleware function is a potential "response" on the stack. It can inspect the request, modify it, or even end the request-response cycle entirely.
+
+**How we're using it:**
+1.  **Validation (`validate.ts`):** This is our `Counterspell`. Before the `register` controller can even see the request, our Zod validation middleware intercepts it. It checks if the "mana cost" (the data shape) is correct. If not, it counters the request with a `400 Bad Request` error. If it's valid, it calls `next()`, allowing the original spell to continue resolving.
+2.  **Authentication (`protect.ts`):** This is our `Ghostly Prison`. For protected routes, this middleware checks if the incoming request has a valid JWT (a "paid the {1}" cost). It verifies the token, fetches the user from the database, and attaches the user's data to the request object. If the token is missing or invalid, it rejects the request with a `401 Unauthorized` error. If valid, it calls `next()` and the controller function can proceed, now with the knowledge of *who* is making the request.
+
+The `next()` function is the key. It's the equivalent of saying, "Okay, my Instant resolves, now we move to the next thing on the stack." This pattern of chaining middleware allows us to create clean, reusable, and highly focused pieces of logic. Our controllers don't need to know *how* to validate data or authenticate a user; they just trust that if the request reaches them, the middleware has already done its job.
+
 ---
 
 ## Chapter 3: The Library - Our Database Stack
