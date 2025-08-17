@@ -23,6 +23,10 @@ export $(grep -v '^#' .env | xargs)
 # Source the backend/.env file for DATABASE_URL for Prisma migrations
 export $(grep -v '^#' backend/.env | xargs)
 
+# Override DATABASE_URL for host-based Prisma commands
+# This ensures Prisma CLI connects to the exposed port on localhost
+export DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${DB_PORT}/${POSTGRES_DB}"
+
 if ! command -v nc &> /dev/null; then
     echo "Warning: 'nc' (netcat) could not be found. The script will use a fixed delay to wait for the database." >&2
     echo "For a more reliable startup, please install netcat (e.g., 'sudo apt-get install netcat')." >&2
