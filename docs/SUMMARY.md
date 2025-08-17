@@ -55,5 +55,6 @@ PodTracker follows a standard three-tier web architecture, containerized for con
 - **Containerization:** Docker
 - **Orchestration:** Docker Compose (for local development and staging)
 - **Web Server / Reverse Proxy:** Nginx
+- **Remote Deployment:** Custom scripts (`deploy-to-server.sh`, `remote-setup.sh`) using rsync and SSH.
 - **Future Scalability:** Potential migration to Kubernetes for larger-scale deployments.
 - **Goal:** A portable, reproducible, and scalable application environment.

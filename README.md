@@ -48,7 +48,7 @@ chmod +x ./scripts/*.sh
 ./scripts/setup.sh
 ```
 
-### 2. Running the Application
+### 2. Running the Application Locally
 
 Use ./scripts/deploy.sh to launch Docker Compose to build the images and start all the services.
 
@@ -60,17 +60,27 @@ The application services will be available at the following local addresses:
 
 *Note: These ports are the defaults and can be configured in the root `.env` file after running the initialization script.*
 
-### 3. Developer Workflow Scripts
+### 3. Remote Deployment
+
+To deploy the application to a remote server, use the `deploy-to-server.sh` script:
+
+```bash
+./scripts/deploy-to-server.sh user@your-server.com
+```
+
+This script will sync the project files and run the setup on the remote server.
+
+### 4. Developer Workflow Scripts
 
 The `scripts/` directory contains helpers for common development tasks:
 
-- **`./scripts/git-pr.sh [base-branch]`**: Prepares your current feature branch for a pull request. It fetches the latest changes, interactively rebases your branch onto the target branch (default: `main`), and force-pushes with a lease. This ensures a clean, linear history.
-- **`./scripts/deploy.sh`**: A convenience script that runs `docker-compose up --build`.
+- **`./scripts/git-push.sh [base-branch]`**: Stages all changes, prompts for a commit message, and pushes the branch to the remote repository. It rebases onto the target branch (default: `main`) to ensure a clean history.
+- **`./scripts/deploy.sh`**: A convenience script that runs `docker-compose up --build` for local development.
 - **`./scripts/get_timestamp.sh` / `.ps1`**: Returns a standardized timestamp string (`YYYY-MM-DD-HH-MM-SS`) for use in other scripts.
 
 Make sure scripts are executable by running `chmod +x ./scripts/*.sh`.
 
-## 4. Project Roadmap
+## 5. Project Roadmap
 
 *For a more detailed breakdown of the tasks in each phase, see [docs/GOALS.md](./docs/GOALS.md).*
 

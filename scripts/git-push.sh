@@ -30,7 +30,7 @@ print_header() {
 BASE_BRANCH="${1:-main}"
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-print_header "Preparing Pull Request for branch '$CURRENT_BRANCH'"
+print_header "Committing and Pushing branch '$CURRENT_BRANCH'"
 
 # --- Pre-flight Checks ---
 if [ "$CURRENT_BRANCH" == "main" ] || [ "$CURRENT_BRANCH" == "develop" ]; then
@@ -38,11 +38,20 @@ if [ "$CURRENT_BRANCH" == "main" ] || [ "$CURRENT_BRANCH" == "develop" ]; then
   exit 1
 fi
 
-if ! git diff-index --quiet HEAD --; then
-    echo -e "${RED}Error: You have uncommitted changes.${NC}"
-    echo "Please commit or stash them before preparing the pull request."
+# --- Commit Changes ---
+print_header "Staging all changes"
+git add .
+
+echo -e "\nPlease enter a commit message:"
+read -p "> " COMMIT_MESSAGE
+
+if [ -z "$COMMIT_MESSAGE" ]; then
+    echo -e "\n${RED}Error: Commit message cannot be empty.${NC}"
     exit 1
 fi
+
+print_header "Committing changes"
+git commit -m "$COMMIT_MESSAGE"
 
 # --- Confirmation ---
 echo -e "\nThis script will perform the following actions:"
@@ -54,6 +63,8 @@ read -p "Are you sure you want to continue? (y/n) " -n 1 -r
 echo # move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo -e "\n${YELLOW}Operation cancelled by user.${NC}"
+    # Un-do the commit if the user cancels
+    git reset --soft HEAD~1
     exit 1
 fi
 
@@ -73,4 +84,4 @@ print_header "Pushing '$CURRENT_BRANCH' to origin"
 git push origin "$CURRENT_BRANCH" --force-with-lease
 
 print_header "Success!"
-echo -e "${GREEN}Branch '${BOLD}$CURRENT_BRANCH${NC}' is up-to-date with '${BOLD}$BASE_BRANCH${NC}' and ready for a pull request.${NC}"
+echo -e "${GREEN}Branch '${BOLD}$CURRENT_BRANCH${NC}' has been committed and pushed to origin.${NC}"

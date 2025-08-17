@@ -1,3 +1,9 @@
+# Commit Summary
+- feat(deploy): add remote deployment and enhanced git push script
+
+## Commit Description
+- Introduced a new deployment mechanism for remote servers and enhanced the git workflow. Created 'deploy-to-server.sh' and 'remote-setup.sh' to facilitate deploying the application to a remote server using rsync and ssh. Created 'git-push.sh' to streamline the process of adding, committing, and pushing code. Removed the redundant 'git-pr.sh' script.
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -6,11 +12,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Commit Summary
-- docs(directive): update changelog workflow
 
-### Commit Description
-- Modified `docs/DIRECTIVE.md` to require a `Commit Summary` and `Commit Description` for each set of changes added to the changelog. This formalizes the process of generating commit messages from the changelog itself.
+### Added
+- **Tooling(deploy):** Created `scripts/deploy-to-server.sh` to deploy the application to a remote server.
+- **Tooling(deploy):** Created `scripts/remote-setup.sh` as a helper script to be executed on the remote server.
+- **Tooling(git):** Created `scripts/git-push.sh` to stage, commit, and push changes.
+
+### Removed
+- **Tooling(git):** Removed `scripts/git-pr.sh`, which is now superseded by `git-push.sh`.
 
 ### Changed
 - **Documentation:** Updated `docs/DIRECTIVE.md` to include a new rule for maintaining `CHANGELOG.md`.
