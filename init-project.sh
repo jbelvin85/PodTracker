@@ -18,6 +18,14 @@ if ! docker compose version &> /dev/null; then
     exit 1
 fi
 
+if ! command -v nc &> /dev/null; then
+    echo "Warning: 'nc' (netcat) could not be found. The script will use a fixed delay to wait for the database." >&2
+    echo "For a more reliable startup, please install netcat (e.g., 'sudo apt-get install netcat')." >&2
+    WAIT_CMD="sleep"
+else
+    WAIT_CMD="nc"
+fi
+
 # --- 1. Define Default Environment Variables ---
 # These will be written to the root .env file and used by docker-compose
 # and to generate other .env files.
@@ -91,9 +99,45 @@ else
   echo "./.env.test already exists. Skipping creation."
 fi
 
-echo "--- Project Initialization Complete ---"
-echo "Next steps:"
-echo "1. Ensure Docker Desktop is running."
-echo "2. Start the application services: docker-compose up --build"
-echo "3. Run Prisma migrations (after services are up): npx prisma migrate dev"
-echo "4. Run tests: npm test"
+echo "--- Project Initialization Steps Complete ---"
+
+# --- 6. Start Docker Services ---
+echo "6. Building and starting Docker containers in the background..."
+docker compose up --build -d
+
+# --- 7. Wait for Databases to be Ready ---
+echo "7. Waiting for databases to become available..."
+
+wait_for_db() {
+    local port=$1
+    local db_name=$2
+    echo "   - Waiting for ${db_name} on port ${port}..."
+    if [ "$WAIT_CMD" = "nc" ]; then
+        while ! nc -z localhost ${port}; do
+            sleep 1
+        done
+    else
+        # Fallback to a fixed sleep if nc is not available
+        sleep 10
+    fi
+    echo "   - ${db_name} is ready."
+}
+
+wait_for_db ${DB_PORT} "Main DB"
+wait_for_db ${TEST_DB_PORT} "Test DB"
+
+# --- 8. Run Database Migrations ---
+echo "8. Applying database migrations..."
+npx prisma migrate dev --name init
+
+# --- 9. Run Tests to Verify Setup ---
+echo "9. Running backend tests to verify the environment..."
+npm test
+
+echo "--- ✅ PodTracker Environment is Up and Running! ---"
+echo "The application services are running in the background."
+echo "You can access them at:"
+echo "  - Frontend:      http://localhost:${FRONTEND_PORT}"
+echo "  - Backend API:   http://localhost:${BACKEND_PORT}"
+echo "To view logs, run: 'docker compose logs -f'"
+echo "To stop all services, run: 'docker compose down'"
