@@ -12,6 +12,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- **Documentation:** Created `docs/GEMINI_CONTEXT.md` for internal agent notes and technical context.
+- **Documentation:** Created `docs/DECISIONS.md` for Architectural Decision Records.
+- **Documentation:** Created `docs/GLOSSARY.md` for project-specific terminology.
+
+### Changed
+- **Documentation:** Updated `docs/GLOSSARY.md` with definitions for 'MTG' and 'Turn'.
 
 ---
 
