@@ -38,7 +38,7 @@ services:
   backend:
     container_name: podtracker-backend
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     ports:
       - "${BACKEND_PORT:-3001}:3001"
