@@ -17,6 +17,3 @@ yarn-error.log*
 
 # IDE / Editor specific
 .vscode/
-
-# Personal notes and documentation
-docs/LEARNING_JOURNAL.md
