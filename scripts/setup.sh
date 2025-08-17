@@ -103,3 +103,6 @@ npx prisma generate
 echo ""
 echo "--- ✅ Project Setup Complete! ---"
 echo "Next step: Run './scripts/deploy.sh' to build and start the application."
+
+echo "Next step: Starting application deployment..."
+./scripts/deploy.sh
