@@ -62,8 +62,9 @@ The application services will be available at the following local addresses:
 
 ### 3. Remote Deployment
 
-To deploy the application to a remote server, SSH into the server, navigate to the project directory, and run the `git-pull.sh` script:
+The deployment process is now managed via Git. To deploy updates to a remote server, first push your feature branch to the remote repository using `./scripts/git-push.sh`.
 
+Then, SSH into the server, navigate to the project directory, and run the interactive `git-pull.sh` script to pull the desired branch and restart the application containers:
 ```bash
 ssh user@your-server.com
 cd podtracker
@@ -116,6 +117,7 @@ Make sure scripts are executable by running `chmod +x ./scripts/*.sh`.
 
 This project uses the `docs/` directory as the single source of truth for planning and architecture. For more detailed information, please see:
 
+- **docs/PROJECT.md:** A machine-readable summary of the project's status, architecture, and goals.
 - **docs/SUMMARY.md:** A complete breakdown of the tech stack, architecture, and project goals.
 - **docs/GOALS.md:** A detailed outline of the development phases and feature roadmap.
 - **docs/CHANGELOG.md:** A log of all notable changes to the project.

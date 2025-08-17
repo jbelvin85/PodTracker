@@ -15,8 +15,9 @@ Let's begin our journey!
 - **Chapter 1: The Mana Base** - Our Docker Environment
 - **Chapter 2: The Command Zone** - Node.js, Express & TypeScript
 - **Chapter 3: The Library** - Prisma & PostgreSQL
-- **Chapter 4: The Battlefield** - React, Vite & PWAs
-- **Chapter 5: The Primer - Putting it all together**
+- **Chapter 4: The Battlefield** - Our Frontend Stack
+- **Chapter 5: The Primer - A Spell on the Stack**
+- **Chapter 6: The Scryfall - Our Testing Strategy**
 
 ---
 
@@ -177,9 +178,23 @@ We have two more key Prisma concepts:
 
 Our **Express** backend (the commander) needs to find a user. It doesn't shout into the void of the **PostgreSQL** library using ancient SQL. Instead, it just taps **Prisma** (our tutor) on the shoulder and says, "Get me this user." Prisma handles the search and brings back the exact, perfectly-typed card our commander needs to win the game.
 
+### Part 4: The Singleton Pattern - A Single, Loyal Tutor
+
+**What is it?** Imagine you're playing a game and every single time you wanted to search your library, you had to cast a *new* `Demonic Tutor` spell. It would be incredibly inefficient, costing you mana and time, and you might even run out of tutors! This is what happens if our application creates a new connection to the database for every single request. It's wasteful and can quickly exhaust the number of available connections, crashing the server.
+
+The **Singleton Pattern** solves this.
+
+**The Analogy:** Instead of casting a new tutor spell every time, we have one, single, loyal `Demonic Tutor` that stays on the battlefield with us for the entire game. Whenever we need a card, we just tap our loyal tutor on the shoulder. It knows our library inside and out and manages all our search requests efficiently.
+
+**How we're using it:** We create a single, shared instance of the Prisma client (`const prisma = new PrismaClient()`) and export it from one central file. Every other part of our application that needs to talk to the database imports this *same instance*.
+
+**Why is this our strategy?**
+1.  **Efficiency:** We avoid the overhead of establishing a new database connection for every query, which significantly improves performance.
+2.  **Resource Management:** It prevents our application from opening too many database connections, which is a common source of production failures. It ensures we play within the limits of our mana base.
+
 ---
 
-## Chapter 4: The Battlefield - React, Vite & PWAs (On the Stack)
+## Chapter 4: The Battlefield - Our Frontend Stack
 
 With our robust mana base (Docker) and a powerful commander (Node.js, Express, TypeScript) that can tutor for any card in our library (Prisma, PostgreSQL), it's time to bring the game to the battlefield. This is where the user interacts directly with our application—the visual interface, the spells they cast, and the creatures they summon. This is our frontend, built with React and optimized by Vite, and designed to be a Progressive Web Application (PWA).
 
@@ -187,34 +202,88 @@ Our frontend is like the battlefield itself, where all the action happens. It's 
 
 ### Part 1: React - Our Hand of Cards
 
-**What is it?** React is a JavaScript library for building user interfaces. Think of it as our hand of cards. Instead of drawing a whole new hand every time something changes on the battlefield, React lets us manage individual cards (components) and efficiently update only the ones that need to change. This makes our application feel fast and fluid.
+**What is it?** React is a JavaScript library for building user interfaces. Think of it as our hand of cards. Instead of drawing a whole new hand every time something changes on the battlefield, React lets us manage individual cards (**components**) and efficiently update only the ones that need to change. This makes our application feel fast and fluid.
 
-**Why are we using it?** React allows us to build complex UIs from small, isolated, and reusable pieces called **components**. Each component is like a single card in our hand—it has its own abilities and can be combined with other cards to create powerful synergies. For example, a "Deck Card" component might display a deck's name and commander, and we can reuse this component for every deck in a user's collection. This modularity makes our code easier to manage, test, and scale.
+**Why are we using it?** React allows us to build complex UIs from small, isolated, and reusable pieces called **components**. Each component is like a single card in our hand—it has its own abilities and can be combined with other cards to create powerful synergies. For example, a `DeckCard` component might display a deck's name and commander, and we can reuse this component for every deck in a user's collection. This modularity makes our code easier to manage, test, and scale.
 
 ### Part 2: Vite - Our Fast Scry
 
-**What is it?** Vite (pronounced "veet") is a next-generation frontend tooling that significantly improves the development experience. If traditional build tools were like shuffling your entire deck every time you wanted to draw a card, Vite is like a fast "scry" ability. It provides incredibly fast hot module replacement (HMR) and a lightning-fast development server.
+**What is it?** Vite (pronounced "veet") is a next-generation frontend tooling that significantly improves the development experience. If traditional build tools were like shuffling your entire deck every time you wanted to draw a card, Vite is like a fast `scry` ability. It provides incredibly fast hot module replacement (HMR) and a lightning-fast development server.
 
 **Why are we using it?** During development, every time we make a change to our frontend code, Vite quickly updates only the necessary parts of the application in the browser, without a full page reload. This means we spend less time waiting for our changes to compile and more time building. It's like being able to instantly see the top card of your library without having to shuffle.
 
-### Part 3: Progressive Web Applications (PWAs) - Our Indestructible Enchantment
+### Part 3: SWR - Our Gitaxian Probe
 
-**What is it?** A Progressive Web Application (PWA) is a web application that uses modern web capabilities to deliver an app-like experience to users. Think of it as an indestructible enchantment that makes our web application behave like a native app. It can be installed on a user's home screen, work offline, and send push notifications.
+**What is it?** SWR (Stale-While-Revalidate) is a React Hook library for data fetching. It's our primary tool for asking our backend for information about our decks, games, and users.
 
-**Why is this our strategy?** PWAs offer the best of both worlds: the accessibility of the web with the rich features of native applications. For PodTracker, this means:
+**The Analogy:** In Magic, information is power. A well-timed `Gitaxian Probe` can reveal an opponent's hand, giving you the knowledge you need to win. SWR is our `Gitaxian Probe`. When our frontend needs data, SWR executes a two-part strategy:
+1.  **Stale (The Probe):** It first gives us the *last known version* of that data from its cache. This is like knowing what was in the opponent's hand a turn ago. It's instant, so our UI can render immediately without a loading spinner.
+2.  **Revalidate (The Card Draw):** Then, in the background, SWR sends a new request to our backend to get the freshest data. When that request returns, it automatically updates our UI. This is the "draw a card" part of the probe—the new, updated information.
 
-1.  **Installability:** Users can "install" PodTracker directly from their browser to their device's home screen, bypassing app stores.
-2.  **Offline Capability:** Even if a user loses their internet connection during a game, the PWA can continue to function, allowing them to track life totals and game actions. This is achieved through **Service Workers**, which act like a proxy between the browser and the netwrk, caching resources and handling offline requests.
-3.  **Responsiveness:** The application will adapt to any screen size, from mobile phones to desktop monitors, ensuring a consistent user experience across devices.
+**Why is this our strategy?** This makes our application feel incredibly fast and resilient. The user sees meaningful content immediately, even if it's a second out of date. It's almost always better to show slightly old data than to show a blank loading screen. SWR handles all the complexity of caching, re-fetching data when the user re-focuses the window, and more, all behind the scenes.
+
+### Part 4: Tailwind CSS - Our Sigil of Distinction
+
+**What is it?** Tailwind CSS is a "utility-first" CSS framework. Instead of giving us pre-built components like a styled "card" or "button", it gives us a massive library of tiny, single-purpose utility classes that we can compose together to build completely custom designs.
+
+**The Analogy:** Imagine you're building an army.
+-   **Traditional CSS frameworks** are like getting pre-made creature cards: a `Grizzly Bears`, a `Hill Giant`. They are what they are. You can't easily make the `Grizzly Bears` a 3/3 or give it flying.
+-   **Tailwind CSS** is like being handed a box full of +1/+1 counters, flying counters, trample counters, and haste counters. You start with a basic 1/1 token and combine these "utility" counters to build *exactly* the creature you need.
+
+**How we're using it:** We apply these utility classes directly in our React components. A button might look like this:
+`<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">`
+Each class does one tiny thing (`bg-blue-500` sets the background color, `rounded` adds rounded corners). This allows us to build unique and complex user interfaces without ever leaving our component files, ensuring our styles are consistent and easy to manage.
+
+### Part 5: Progressive Web Applications (PWAs) - Our Indestructible Enchantment
+
+**What is it?** A Progressive Web Application (PWA) is a web app that uses modern web capabilities to deliver an app-like experience. Think of it as an indestructible enchantment that makes our application behave like a native app. It can be installed on a user's home screen, work offline, and eventually, send push notifications.
+
+**Why is this our strategy?** PWAs offer the best of both worlds: the reach of the web with the features of a native app. For PodTracker, this means:
+1.  **Installability:** Users can install PodTracker directly from their browser to their home screen, bypassing app stores.
+2.  **Offline Capability:** Even if a user loses their internet connection at a game store, the PWA can continue to function. This is achieved through **Service Workers**, which act like a proxy between the browser and the network, intelligently caching resources and handling offline requests.
+3.  **Responsiveness:** The application will adapt to any screen size, from a phone to a desktop monitor.
 
 ### Putting It All Together: The Game in Play
 
 When a user opens PodTracker in their browser:
+1.  **Vite** serves the initial React application with lightning speed.
+2.  **React** begins to render the user interface. A component needs to display a list of the user's decks.
+3.  **SWR** is called. It immediately returns a cached (stale) list of decks, so the UI can render instantly. In the background, it sends a request to our backend for fresh data.
+4.  The components are styled using **Tailwind CSS** utility classes, creating a custom and consistent look and feel.
+5.  In the background, a **Service Worker** (the heart of our PWA) caches all the necessary application assets (code, images).
+6.  When the fresh data arrives from the backend, **SWR** automatically updates the UI.
+7.  Because of the Service Worker, the next time the user opens the app, it will load almost instantly, even if they have a poor internet connection.
 
-1.  **Vite** serves the initial React application quickly.
-2.  **React** renders the user interface, displaying components like their list of decks or active games.
-3.  As the user interacts, React efficiently updates the UI.
-4.  In the background, **Service Workers** (part of the PWA implementation) cache resources, enabling offline access and faster subsequent loads.
-5.  The frontend communicates with our **Express** backend (Chapter 2) to fetch and send data, using **SWR** for efficient data fetching and caching.
+This combination of technologies ensures that PodTracker provides a smooth, fast, and reliable user experience, making it a powerful tool for any Commander player. It's our game in play, ready for any challenge the battlefield throws at it.
 
-This combination of React, Vite, and PWA principles ensures that PodTracker provides a smooth, fast, and reliable user experience, whether they are online or offline, on a phone or a desktop. It's our game in play, ready for any challenge the battlefield throws at it.
+---
+
+## Chapter 6: The Scryfall - Our Testing Strategy
+
+Our deck is built. The synergy is there. But is it ready for a tournament? A top-tier cEDH deck isn't just powerful; it's resilient and predictable. The pilot knows it inside and out because they've playtested it relentlessly. In software, this is **testing**. It's how we ensure our application is robust, reliable, and ready for our users.
+
+Our testing strategy is like using `Sensei's Divining Top`—we're looking at our own code to make sure the future is what we expect it to be. It's not about proving the code works; it's about aggressively finding where it *doesn't*. This provides a critical safety net, allowing us to refactor our code and add new features with confidence, knowing that if we break something, our tests will be the first to tell us.
+
+### Part 1: Jest - Goldfishing Our Functions (Unit Tests)
+
+**What is it?** Jest is our testing framework. It provides the structure and tools for us to write and run our tests. Our first line of defense is the **unit test**.
+
+**The Analogy:** A unit test is like "goldfishing" a combo. You play your deck by yourself, with no opponents, to answer one simple question: "Does my core mechanic work in a vacuum?" You are testing a single "unit" of your code—one function—in perfect isolation. We use Jest to ask questions like:
+-   "If I give my `hashPassword` function a password string, does it return a hashed string?"
+-   "If I give my `calculateLifeTotal` function two numbers, does it return the correct sum?"
+
+We're not testing the database, the API, or how other functions interact with it. We are just making sure that this one specific card does exactly what the text on it says it does. This is the most fundamental level of testing.
+
+### Part 2: Supertest - Scrimming Our API (Integration Tests)
+
+**What is it?** Supertest is a library that works with Jest to let us write **integration tests** for our API endpoints.
+
+**The Analogy:** An integration test is like a practice game or a "scrimmage." You're no longer just testing one card; you're testing a whole sequence of plays. Supertest lets us simulate a real HTTP request being sent to our running application and then inspect the response it sends back. It lets us test the *integration* of multiple units working together.
+
+With Supertest, we can ask much more complex questions:
+-   "If a user sends a `POST` request to the `/api/auth/register` endpoint with a valid username and password, do we get back a `201 Created` status code and a JWT?"
+-   "If we then try to register the *same user again*, do we correctly get back a `409 Conflict` error?"
+
+This tests the entire "stack" for that route: the Express router, our Zod and JWT middleware, the controller logic, and even its interaction with a test database. It's how we ensure our entire game plan works from start to finish, giving us the highest confidence that our backend is behaving as expected.
+
+By combining focused unit tests (goldfishing) with broader integration tests (scrimming), we create a comprehensive test suite that ensures PodTracker is not just a powerful application, but a reliable one.

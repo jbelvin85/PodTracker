@@ -1,8 +1,8 @@
 # Commit Summary
-- refactor(deploy): switch to git-based deployment workflow
+docs: align documentation with new git-based deployment workflow
 
 ## Commit Description
-- Changed the deployment strategy from a push-based rsync model to a pull-based git model. Removed the 'deploy-to-server.sh' and 'remote-setup.sh' scripts. Created a new 'git-pull.sh' script to be run on the server, which guides the user through selecting a branch, pulling the latest code, and restarting the application.
+Finalized the git-based deployment workflow by removing the old rsync-based scripts and creating a new git-pull script for the server. Updated all living documents (README, GOALS, PROJECT, CHANGELOG, LEARNING_JOURNAL) to reflect the new process, project status, and recent architectural improvements like the Prisma singleton. This commit brings all documentation in sync with the current codebase.
 
 # Changelog
 
@@ -13,29 +13,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- **Tooling(git):** Created `scripts/git-pull.sh` to interactively pull updates from the git repository on the server.
+---
 
-### Removed
-- **Tooling(deploy):** Removed `scripts/deploy-to-server.sh`.
-- **Tooling(deploy):** Removed `scripts/remote-setup.sh`.
+## [0.1.5] - 2024-08-19
+### Added
+- **Documentation:** Created `docs/PROJECT.md` to serve as a machine-readable summary of the project.
+- **Tooling(git):** Created `scripts/git-pull.sh` to interactively pull updates from the git repository on the server.
+- **Tooling:** Created `get_timestamp.sh` and `get_timestamp.ps1` helper scripts to generate a standardized timestamp string (`YYYY-MM-DD-HH-MM-SS`).
 
 ### Changed
-- **Documentation:** Updated `docs/DIRECTIVE.md` to include a new rule for maintaining `CHANGELOG.md`.
+- **Documentation:** Updated `docs/DIRECTIVE.md` to incorporate `PROJECT.md` into the core workflow, add a rule for maintaining `CHANGELOG.md`, and refactored the entire document for clarity.
+- **Configuration:** Centralized all backend environment variables (`DATABASE_URL`, `JWT_SECRET`, etc.) to be sourced from the root `.env` file and passed into the `backend` container via `docker-compose.yml`. Removed the redundant `backend/.env` file reference.
+- **Architecture:** Refactored the backend to use a singleton pattern for the Prisma client, improving database connection management and efficiency.
+- **Tooling(setup):** The `setup.sh` script now automatically makes all `.sh` scripts in the `scripts/` directory executable.
 
 ### Fixed
 - **Deployment:** The `deploy.sh` script now correctly runs database migrations and tests inside the `backend` container using `docker compose exec`, ensuring a consistent and reliable environment.
 
-### Changed
-- **Configuration:** Centralized all backend environment variables (`DATABASE_URL`, `JWT_SECRET`, etc.) to be sourced from the root `.env` file and passed into the `backend` container via `docker-compose.yml`. Removed the redundant `backend/.env` file reference.
-- **Architecture:** Refactored the backend to use a singleton pattern for the Prisma client, improving database connection management and efficiency.
-
-### Added
-- **Tooling:** Created `get_timestamp.sh` and `get_timestamp.ps1` helper scripts to generate a standardized timestamp string (`YYYY-MM-DD-HH-MM-SS`).
-
-### Changed
-- **Tooling(setup):** The `setup.sh` script now automatically makes all `.sh` scripts in the `scripts/` directory executable.
-- **Documentation:** Refactored `docs/DIRECTIVE.md` into a clearer, more structured format to improve AI collaboration workflow. This includes defining a persona, core objective, workflow, and explicit documentation rules.
+### Removed
+- **Tooling(deploy):** Removed `scripts/deploy-to-server.sh`.
+- **Tooling(deploy):** Removed `scripts/remote-setup.sh`.
 
 ---
 
