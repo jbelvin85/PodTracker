@@ -5,7 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.1]
+## [0.1.3]
+### Commit Summary
+- fix(deploy)
+### Commit Description
+- Resolved a deployment failure by creating a placeholder frontend service. This allows the Docker environment to build and run successfully during early backend-focused development phases, unblocking further work on the API.
+
+### Added
+- **Tooling:** Created a placeholder `frontend/Dockerfile` to ensure the frontend service can be built by Docker Compose before the React application is implemented.
+
+### Changed
+- **Configuration:** Removed the obsolete `version` attribute from `docker-compose.yml` to align with modern Docker Compose standards.
+
+### Fixed
+- **Deployment:** Corrected a "path not found" error in `deploy.sh` by providing the necessary `frontend/` directory and Dockerfile for the `frontend` service build context.
+
+## [0.1.2]
 ### Commit Summary
 - security
 ### Commit Description
