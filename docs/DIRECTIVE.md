@@ -44,3 +44,12 @@ When proposing documentation updates, use the following guidelines. Present all 
 -   **`@LEARNING_JOURNAL.md`**
     -   This is our living textbook. The tone should be educational and accessible.
     -   When using analogies related to Magic: The Gathering (MTG), ensure they are contextually accurate with the comprehensive game rules and the Commander (EDH) format.
+
+## 5. Branching Strategy
+
+To maintain a clean and stable codebase, we adhere to a feature branching workflow:
+
+-   **Feature Branches:** All new features, bug fixes, and significant changes must be developed on dedicated feature branches. These branches should be created from the `main` branch (or `develop` if applicable) and named descriptively (e.g., `feature/add-user-auth`, `bugfix/login-issue`).
+-   **Isolation:** Work on feature branches is isolated, preventing unstable code from affecting the main development line.
+-   **Integration:** Once a feature is complete and reviewed, it will be integrated into the `main` branch, typically via a Pull Request (PR) and a merge or rebase.
+-   **`git-push.sh`:** Use the `git-push.sh` script to commit, rebase, and push your feature branches to the remote. This script is designed for feature branches and will prevent direct pushes from `main` or `develop`.

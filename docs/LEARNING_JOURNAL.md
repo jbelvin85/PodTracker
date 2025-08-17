@@ -18,6 +18,75 @@ Let's begin our journey!
 - **Chapter 4: The Battlefield** - Our Frontend Stack
 - **Chapter 5: The Primer - A Spell on the Stack**
 - **Chapter 6: The Scryfall - Our Testing Strategy**
+- **Chapter 7: The Branching Paths** - Our Git Workflow
+
+---
+
+## Chapter 7: The Branching Paths - Our Git Workflow
+
+In Magic: The Gathering, a single game can diverge into countless possibilities based on the choices players make. Similarly, in software development, our codebase is constantly evolving, and we need a way to manage multiple lines of development simultaneously without chaos. This is where **Git branching** comes in.
+
+Think of your `main` branch as the **"Official Tournament Rules"** document. It's the stable, agreed-upon version of the game. You don't just scribble new rules directly onto it. Instead, you propose changes, test them, and only once they're proven, do they become part of the official rules.
+
+### Part 1: Feature Branches - Exploring New Strategies
+
+**What is it?** A **feature branch** is like taking a copy of the "Official Tournament Rules" and going into a separate room to experiment with a new, untested rule change. You can modify it, playtest it, and see how it affects the game without impacting the ongoing tournament (your main development line).
+
+Every new feature, bug fix, or significant change in PodTracker should be developed on its own dedicated feature branch.
+
+**Why is this our strategy?**
+1.  **Isolation:** Your experimental rule changes don't break the main game. Your new code doesn't interfere with the stable `main` branch. This means the `main` branch is always in a deployable state.
+2.  **Collaboration:** Multiple players (developers) can experiment with different rule changes (features) simultaneously in their own rooms without stepping on each other's toes.
+3.  **Review:** Once you're happy with your new rule, you propose it back to the tournament organizers (via a Pull Request). They review your changes, suggest improvements, and only then, if approved, does it become part of the official rules.
+
+**Naming Conventions:** Just like a good rule proposal has a clear title, our feature branches should be named descriptively. We recommend:
+*   `feature/descriptive-feature-name` (e.g., `feature/add-user-profile`)
+*   `bugfix/issue-description` (e.g., `bugfix/login-error-handling`)
+*   `refactor/area-of-refactor` (e.g., `refactor/auth-middleware`)
+
+### Part 2: Rebase vs. Merge - Rewriting History vs. Documenting History
+
+When it's time to integrate your feature branch back into `main`, Git offers two primary strategies: **merge** and **rebase**.
+
+**Merge (The "Side Quest" Analogy):**
+Imagine you went on a side quest. You completed it, and now you're back. A merge operation brings your side quest's history (your commits) and the main story's history together, creating a new "merge commit" that explicitly shows where the two paths joined. This preserves the exact history of your feature branch.
+
+**Rebase (The "Linear Story" Analogy):**
+Imagine you went on a side quest, but when you return, you rewrite your personal diary to make it seem like you were always on the main path, just doing your side quest activities *after* everything else that happened on the main path. A rebase operation moves your feature branch's commits to the "tip" of the `main` branch, effectively rewriting your branch's history to be a linear extension of `main`.
+
+**Why PodTracker Uses Rebase for Feature Branches:**
+For feature branches, PodTracker prefers a **rebase workflow** before pushing to the remote. Our `git-push.sh` script automates this.
+
+*   **Cleaner History:** Rebasing creates a linear project history, which is easier to read and understand. It avoids the "merge commit" noise that can clutter the commit graph, especially with frequent merges.
+*   **Easier Debugging:** A linear history makes it simpler to use `git bisect` to find the commit that introduced a bug.
+*   **`git-push.sh` and `force-with-lease`:** Our `git-push.sh` script performs a `git rebase origin/main` (or `origin/develop`) and then a `git push --force-with-lease`.
+    *   `--force-with-lease` is a safer version of `git push --force`. It only force-pushes if your local branch is based on the same remote state as when you last pulled. This prevents you from accidentally overwriting someone else's work if they pushed changes to the same branch in the interim.
+
+### Part 3: The `git-push.sh` Script - Your Automated Guide
+
+Our `git-push.sh` script is designed to streamline this process for your feature branches. When you run it:
+1.  It stages all your changes (`git add .`).
+2.  It prompts you for a commit message (`git commit -m "..."`).
+3.  It fetches the latest changes from `origin` (`git fetch origin`).
+4.  It rebases your current feature branch onto `origin/main` (or `origin/develop`) (`git rebase origin/main`).
+5.  It then pushes your rebased branch to the remote using `git push origin <your-branch-name> --force-with-lease`.
+
+**Important:** This script explicitly prevents you from running it on the `main` or `develop` branches. These branches are considered stable and should only be updated via merges (typically from Pull Requests) to maintain a clear, non-rewritten history.
+
+### Part 4: Pull Requests (PRs) - Proposing Your Rule Change
+
+Once your feature branch is complete and pushed to the remote, the final step is to open a **Pull Request (PR)** (also known as a Merge Request in some systems like GitLab).
+
+**The Analogy:** A Pull Request is your formal proposal to the tournament organizers to incorporate your new rule change into the "Official Tournament Rules" (`main` branch).
+
+**What happens in a PR?**
+1.  **Code Review:** Other developers review your code, provide feedback, and suggest improvements. This is crucial for catching bugs, ensuring code quality, and sharing knowledge.
+2.  **Automated Checks:** CI/CD pipelines often run automated tests, linters, and build checks to ensure your changes don't break anything and adhere to project standards.
+3.  **Discussion:** Any discussions about the feature, design choices, or potential issues happen directly within the PR.
+4.  **Approval & Merge:** Once the code is reviewed, all checks pass, and approvals are given, your feature branch is merged into the `main` branch.
+
+By following this feature branching workflow, we ensure that PodTracker's codebase remains stable, our development process is collaborative, and our history is clean and easy to follow. It's how we build a robust and reliable application, one well-tested feature at a time.
+**
 
 ---
 

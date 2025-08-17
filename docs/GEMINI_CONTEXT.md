@@ -31,3 +31,4 @@ This document is for Gemini's internal use to store deeper technical context, op
 ## Important Notes
 
 *   `LEARNING_JOURNAL.md` is specifically for the user's learning and documentation. My internal technical context will be stored here in `GEMINI_CONTEXT.md`.
+*   **Feature Branching:** The project utilizes a feature branching workflow. All new development (features, bug fixes) occurs on dedicated feature branches, which are then integrated into `main` (or `develop`) via PRs. The `git-push.sh` script is designed to facilitate pushing these feature branches.

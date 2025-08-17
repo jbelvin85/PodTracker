@@ -121,3 +121,8 @@ This project uses the `docs/` directory as the single source of truth for planni
 - **docs/SUMMARY.md:** A complete breakdown of the tech stack, architecture, and project goals.
 - **docs/GOALS.md:** A detailed outline of the development phases and feature roadmap.
 - **docs/CHANGELOG.md:** A log of all notable changes to the project.
+- **docs/LEARNING_JOURNAL.md:** A living textbook for practical PWA development, using this project as a real-world example.
+
+## 6. Contribution Guidelines
+
+To ensure a consistent and stable development process, this project utilizes a **feature branching workflow**. All new features, bug fixes, and significant changes should be developed on dedicated feature branches. For detailed guidelines on our branching strategy and development workflow, please refer to [docs/DIRECTIVE.md](./docs/DIRECTIVE.md).

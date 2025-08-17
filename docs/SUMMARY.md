@@ -58,3 +58,7 @@ PodTracker follows a standard three-tier web architecture, containerized for con
 - **Remote Deployment:** Git-based workflow using a custom `git-pull.sh` script on the server.
 - **Future Scalability:** Potential migration to Kubernetes for larger-scale deployments.
 - **Goal:** A portable, reproducible, and scalable application environment.
+
+## 5. Development Workflow
+
+To ensure a structured and stable development process, PodTracker utilizes a **feature branching workflow**. All new features, bug fixes, and significant changes are developed on dedicated branches, which are then integrated into the `main` branch after review. This approach promotes isolation, collaboration, and maintains the stability of the main codebase.

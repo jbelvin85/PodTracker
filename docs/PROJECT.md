@@ -106,3 +106,4 @@ This project uses the `docs/` directory as the single source of truth for planni
 - **Propose Doc Updates:** After any major change, propose updates to this document and the `CHANGELOG.md`.
 - **Await Confirmation:** Do not apply changes until confirmed.
 - **Memory Management:** Proactively add new useful information from updated living documents to memory.
+- **Branching Strategy:** Adhere to the feature branching workflow, developing new features and fixes on dedicated branches before integration into `main`.
