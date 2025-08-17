@@ -62,19 +62,22 @@ The application services will be available at the following local addresses:
 
 ### 3. Remote Deployment
 
-To deploy the application to a remote server, use the `deploy-to-server.sh` script:
+To deploy the application to a remote server, SSH into the server, navigate to the project directory, and run the `git-pull.sh` script:
 
 ```bash
-./scripts/deploy-to-server.sh user@your-server.com
+ssh user@your-server.com
+cd podtracker
+./scripts/git-pull.sh
 ```
 
-This script will sync the project files and run the setup on the remote server.
+This script will guide you through selecting a branch and updating the application.
 
 ### 4. Developer Workflow Scripts
 
 The `scripts/` directory contains helpers for common development tasks:
 
 - **`./scripts/git-push.sh [base-branch]`**: Stages all changes, prompts for a commit message, and pushes the branch to the remote repository. It rebases onto the target branch (default: `main`) to ensure a clean history.
+- **`./scripts/git-pull.sh`**: An interactive script to be run on the server to pull the latest changes for a specific branch and restart the application.
 - **`./scripts/deploy.sh`**: A convenience script that runs `docker-compose up --build` for local development.
 - **`./scripts/get_timestamp.sh` / `.ps1`**: Returns a standardized timestamp string (`YYYY-MM-DD-HH-MM-SS`) for use in other scripts.
 

@@ -1,8 +1,8 @@
 # Commit Summary
-- feat(deploy): add remote deployment and enhanced git push script
+- refactor(deploy): switch to git-based deployment workflow
 
 ## Commit Description
-- Introduced a new deployment mechanism for remote servers and enhanced the git workflow. Created 'deploy-to-server.sh' and 'remote-setup.sh' to facilitate deploying the application to a remote server using rsync and ssh. Created 'git-push.sh' to streamline the process of adding, committing, and pushing code. Removed the redundant 'git-pr.sh' script.
+- Changed the deployment strategy from a push-based rsync model to a pull-based git model. Removed the 'deploy-to-server.sh' and 'remote-setup.sh' scripts. Created a new 'git-pull.sh' script to be run on the server, which guides the user through selecting a branch, pulling the latest code, and restarting the application.
 
 # Changelog
 
@@ -14,12 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- **Tooling(deploy):** Created `scripts/deploy-to-server.sh` to deploy the application to a remote server.
-- **Tooling(deploy):** Created `scripts/remote-setup.sh` as a helper script to be executed on the remote server.
-- **Tooling(git):** Created `scripts/git-push.sh` to stage, commit, and push changes.
+- **Tooling(git):** Created `scripts/git-pull.sh` to interactively pull updates from the git repository on the server.
 
 ### Removed
-- **Tooling(git):** Removed `scripts/git-pr.sh`, which is now superseded by `git-push.sh`.
+- **Tooling(deploy):** Removed `scripts/deploy-to-server.sh`.
+- **Tooling(deploy):** Removed `scripts/remote-setup.sh`.
 
 ### Changed
 - **Documentation:** Updated `docs/DIRECTIVE.md` to include a new rule for maintaining `CHANGELOG.md`.
