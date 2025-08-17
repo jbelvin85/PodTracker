@@ -7,7 +7,7 @@ services:
     container_name: podtracker-db
     restart: always
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -20,12 +20,28 @@ services:
       timeout: 5s
       retries: 5
 
+  # Isolated PostgreSQL Database for Testing
+  test-db:
+    image: postgres:15-alpine
+    container_name: podtracker-test-db
+    restart: always
+    ports:
+      - "${TEST_DB_PORT:-5433}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: podtracker_test
+    volumes:
+      - podtracker-test-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d podtracker_test"]
+
   # Backend API Service (Node.js)
   backend:
     container_name: podtracker-backend
     build: ./backend
     ports:
-      - "3001:3001"
+      - "${BACKEND_PORT:-3001}:3001"
     depends_on:
       db:
         condition: service_healthy
@@ -40,7 +56,7 @@ services:
     container_name: podtracker-frontend
     build: ./frontend
     ports:
-      - "5173:5173"
+      - "${FRONTEND_PORT:-5173}:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -48,3 +64,5 @@ services:
 volumes:
   podtracker-db-data:
     name: podtracker-db-data
+  podtracker-test-db-data:
+    name: podtracker-test-db-data

@@ -44,7 +44,7 @@ Clone the repository and run the initialization script. This will install all No
 ```bash
 git clone <your-repo-url>
 cd podtracker
-./scripts/init-project.sh
+./init-project.sh
 ```
 
 ### 2. Running the Application
@@ -59,6 +59,8 @@ The application services will be available at the following local addresses:
 
 - **Frontend (React):** `http://localhost:5173`
 - **Backend (Express API):** `http://localhost:3001`
+
+*Note: These ports are the defaults and can be configured in the root `.env` file after running the initialization script.*
 
 ## 🗺️ Project Roadmap
 

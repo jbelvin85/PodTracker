@@ -7,29 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Commit Summary
+
+- Centralized environment configuration, improved test setup, and updated documentation.
+
 ### Added
-- **Tooling:** Created `init-project.sh` script to automate initial project setup (dependency installation, Prisma client generation, .env file creation).
-- **Tech Stack:** Established the core backend stack, including Express for the server, Prisma for the ORM, TypeScript for the language, and Zod for data validation.
-- **Dependencies:** Added the `dotenv` package to manage environment variables for testing.
-- **Configuration:** Created the `.env.test` file to provide a separate database and JWT secret for the testing environment.
-- **Configuration:** Created the `.env` file for the development environment with default database and JWT secret values.
-- **Database:** Generated the Prisma Client (`npx prisma generate`) to enable database access in the application code. This was necessary to run the test suite.
-- **Configuration:** Created `tsconfig.json` to configure the TypeScript compiler. This was necessary to resolve a module interoperability issue (`esModuleInterop`) that prevented the test suite from running. This file governs how our TypeScript code is compiled into JavaScript.
-- **Testing:** Created initial test suite for authentication endpoints (`auth.test.ts`).
-- **Backend:** Set up the main Express server file (`src/index.ts`) and connected the authentication routes.
-- **Authentication:** Created controller with logic for user registration and login (`auth.controller.ts`).
-- **Authentication:** Created initial routes for user registration and login (`auth.routes.ts`).
-- **Tech Stack:** Selected Jest and Supertest as the testing framework for the backend API.
-- **Testing:** Configured an isolated PostgreSQL container (`test-db`) and environment (`.env.test`) for backend testing.
+- **Tooling:** Created `init-project.sh` script to automate initial project setup.
+- **Tech Stack:** Established the core backend stack (Express, Prisma, TypeScript, Zod).
+- **Testing:** Created initial test suite for authentication endpoints (`auth.test.ts`) using Jest and Supertest.
+- **Backend:** Set up the main Express server, authentication controller, and routes.
+- **Configuration:** Established an isolated PostgreSQL container (`test-db`) for testing.
 
 ### Changed
-- **Documentation:** Corrected duplication error in `README.md` and updated to reflect current project status, tech stack, and roadmap details.
-- **Testing:** Configured Jest to load environment variables from `.env.test` using a setup file (`src/tests/setup.ts`). This was done by adding the `setupFiles` property to the `jest` configuration in `package.json`.
-- **Configuration:** Updated `package.json` to specify the location of the Prisma schema file. This simplifies running Prisma commands.
-- **DB Schema:** Added `onDelete` referential actions (`Cascade` for Decks, `Restrict` for Pod Admins) to enforce data integrity rules at the database level.
-- **Documentation:** Expanded the "Features" list in `README.md` to provide greater detail on the gameplay loop and match history capabilities.
-- **Documentation:** Updated `GOALS.md` and `SUMMARY.md` to align with the newly detailed feature set.
-- **Documentation:** Synchronized the roadmap in `README.md` with the current project status in `GOALS.md`.
+- **Configuration:** Centralized all environment variables into a root `.env` file. `docker-compose.yml` and `init-project.sh` now use this as a single source of truth.
+- **Tooling:** Refactored `init-project.sh` to dynamically generate all required `.env` files from the root configuration.
+- **Configuration:** Parameterized all service port mappings in `docker-compose.yml` to be configurable.
+- **Configuration:** Updated `package.json` to specify the Prisma schema location.
+- **Configuration:** Added `tsconfig.json` to resolve module interoperability issues for testing.
+- **DB Schema:** Added `onDelete` referential actions to enforce data integrity.
+- **Documentation:** Updated `README.md`, `GOALS.md`, `SUMMARY.md`, and `NETWORK.md` to reflect the current project status, architecture, and new configurations.
+
+### Fixed
+- **Testing:** Corrected the `DATABASE_URL` in `.env.test` to point to the correct host port for the test database container.
 
 ---
 
