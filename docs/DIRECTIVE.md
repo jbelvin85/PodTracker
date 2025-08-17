@@ -26,8 +26,9 @@ When proposing documentation updates, use the following guidelines. Present all 
 
 -   **`@CHANGELOG.md`**
     -   Update after every major technical change.
-    -   Entries should be clear and chronological.
-    -   Use the `./scripts/get_timestamp.sh` helper to generate a `YYYY-MM-DD` timestamp for new version entries.
+    -   For each update, provide a `# Commit Summary` and `## Commit Description` at the very top of the file, above the `# Changelog` heading. This content will be used for the git commit message.
+    -   Log all changes chronologically under the appropriate sub-heading (`Added`, `Changed`, `Fixed`, etc.).
+    -   Use the `./scripts/get_timestamp.sh` helper to generate a `YYYY-MM-DD` timestamp when creating a new version entry.
 
 -   **`@README.md`**
     -   Update when setup, usage, or architecture changes (e.g., new dependency, file structure change, updated commands).

@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Commit Summary
+- docs(directive): update changelog workflow
+
+### Commit Description
+- Modified `docs/DIRECTIVE.md` to require a `Commit Summary` and `Commit Description` for each set of changes added to the changelog. This formalizes the process of generating commit messages from the changelog itself.
+
+### Changed
+- **Documentation:** Updated `docs/DIRECTIVE.md` to include a new rule for maintaining `CHANGELOG.md`.
+
+### Fixed
+- **Deployment:** The `deploy.sh` script now correctly runs database migrations and tests inside the `backend` container using `docker compose exec`, ensuring a consistent and reliable environment.
+
+### Changed
+- **Configuration:** Centralized all backend environment variables (`DATABASE_URL`, `JWT_SECRET`, etc.) to be sourced from the root `.env` file and passed into the `backend` container via `docker-compose.yml`. Removed the redundant `backend/.env` file reference.
+- **Architecture:** Refactored the backend to use a singleton pattern for the Prisma client, improving database connection management and efficiency.
+
 ### Added
 - **Tooling:** Created `get_timestamp.sh` and `get_timestamp.ps1` helper scripts to generate a standardized timestamp string (`YYYY-MM-DD-HH-MM-SS`).
 

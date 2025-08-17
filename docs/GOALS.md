@@ -1,8 +1,7 @@
 # PodTracker Project Goals
 
 ## Current Task
-
-- **Documentation:** Refine the `DIRECTIVE.md` file to establish a clearer, more structured format for AI collaboration.
+- **Backend:** Implement the core CRUD (Create, Read, Update, Delete) API endpoints for managing `Deck` and `Pod` resources, including route protection.
 
 This document outlines the development goals for recreating and expanding upon the original PodTracker application. Our objective is to build a modern, robust, and scalable PWA using the technology stack defined in `docs/SUMMARY.md`.
 

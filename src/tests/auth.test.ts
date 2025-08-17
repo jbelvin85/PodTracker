@@ -1,14 +1,12 @@
 import request from 'supertest';
 import express from 'express';
 import authRoutes from '../routes/auth.routes';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../lib/prisma';
 
 // Set up a test Express application
 const app = express();
 app.use(express.json());
 app.use('/api/auth', authRoutes);
-
-const prisma = new PrismaClient();
 
 describe('Auth Endpoints', () => {
   // Before any tests run, clear the user table
