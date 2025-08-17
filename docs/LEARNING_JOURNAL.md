@@ -109,6 +109,19 @@ So, when a user clicks "Register" on the frontend:
 
 And that's our commander! A well-oiled machine, ready to manage the game state from the command zone. Next up, we'll talk about our Library—the database where we keep all our best cards.
 
+### Part 4: Zod - The Mana Cost
+
+**What is it?** You can't cast `Cryptic Command` without having one blue and three other mana. You can't cast `Lightning Bolt` with green mana. The mana cost is a strict, non-negotiable contract that defines what you need to pay to put a spell on the stack.
+
+Zod is the **mana cost for our API**. It's a library that lets us define the exact "shape" and type of data we expect for any given API request. For our `/register` endpoint, we declare a schema that says: "To cast this spell, you *must* provide a `username` that's a string of at least 3 characters, an `email` that is a valid email address, and a `password` that is a string of at least 6 characters."
+
+**Why is this our strategy?**
+1.  **Fail Fast:** If a frontend developer tries to send a request without a password, or with a number instead of a string for the username, the request doesn't even make it to our main controller logic. Zod rejects it immediately at the "validation middleware" layer, just like a player can't even begin to cast a spell without the right mana. This prevents a whole class of bugs and provides immediate, clear feedback about what went wrong.
+2.  **Single Source of Truth:** The Zod schema becomes the definitive, code-based documentation for what our API expects. There's no ambiguity.
+3.  **Cleaner Controllers:** Our controller functions (the spell's effect) don't have to be cluttered with repetitive `if (!email) { ... }` checks. They can focus purely on their business logic, confident that the data they've received has already paid its "mana cost" and is valid.
+
+By using Zod, we ensure that every "spell" cast on our API stack is legal before we even begin to resolve it.
+
 ---
 
 ## Chapter 3: The Library - Our Database Stack

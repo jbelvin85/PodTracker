@@ -10,8 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Commit Summary
 
 - Centralized environment configuration, improved test setup, and updated documentation.
+- Implemented robust input validation for authentication endpoints using Zod.
 
 ### Added
+- **Dependencies:** Added `zod` for schema validation.
+- **Architecture:** Created a reusable validation middleware (`src/middleware/validate.ts`).
+- **Architecture:** Created Zod schemas for authentication endpoints (`src/schemas/auth.schema.ts`).
 - **Tooling:** Created `init-project.sh` script to automate initial project setup.
 - **Tech Stack:** Established the core backend stack (Express, Prisma, TypeScript, Zod).
 - **Testing:** Created initial test suite for authentication endpoints (`auth.test.ts`) using Jest and Supertest.
@@ -20,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Configuration:** Centralized all environment variables into a root `.env` file. `docker-compose.yml` and `init-project.sh` now use this as a single source of truth.
+- **Backend:** Refactored `auth.routes.ts` to use the new validation middleware, separating validation from controller logic.
+- **Backend:** Simplified `auth.controller.ts` by removing manual validation checks.
 - **Tooling:** Refactored `init-project.sh` to dynamically generate all required `.env` files from the root configuration.
 - **Configuration:** Parameterized all service port mappings in `docker-compose.yml` to be configurable.
 - **Configuration:** Updated `package.json` to specify the Prisma schema location.

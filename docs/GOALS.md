@@ -20,6 +20,9 @@ The goal of this phase is to build the core data structures and API endpoints th
 - **[x] Database Schema:** Define the complete Prisma schema for all core models. (Initial `User`, `Deck`, and `Pod` models complete).
 
 - **[ ] User Authentication:** Implement secure user registration and login endpoints using JWT.
+  - **[x]** Implement registration/login controller logic.
+  - **[x]** Add Zod validation for auth endpoints.
+  - **[ ]** Add JWT-based route protection middleware.
 - **[ ] Core CRUD APIs:** Create and test the API endpoints for managing Users, Decks, and Pods.
 - **[x] Testing Environment:** Establish a robust testing setup for the backend using Jest and Supertest. (Test database infrastructure configured. **Note: Test execution is currently blocked by pending Docker installation.**).
 

@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { register, login } from '../controllers/auth.controller';
+import { validate } from '../middleware/validate';
+import { registerSchema, loginSchema } from '../schemas/auth.schema';
 
 const router = Router();
 
-// Route for user registration
-router.post('/register', register);
-
-// Route for user login
-router.post('/login', login);
+// Define authentication routes with validation
+router.post('/register', validate(registerSchema), register);
+router.post('/login', validate(loginSchema), login);
 
 export default router;
