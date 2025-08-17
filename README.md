@@ -37,14 +37,15 @@ The goal of PodTracker is to provide a complete toolkit for Commander players:
 
 This project is fully containerized using Docker. Ensure you have **Docker Desktop** (or the Docker Engine/CLI) installed and running.
 
-### 1. First-Time Setup
+### 1. First-Time Setup (Run Once)
 
-Clone the repository and run the initialization script. This will install all Node.js dependencies for the frontend and backend services and create the necessary `.env` files from the templates.
+Clone the repository and run the setup script. This will check for prerequisites, install all Node.js dependencies, and create the necessary `.env` configuration files.
 
 ```bash
 git clone <your-repo-url>
 cd podtracker
-./init-project.sh
+chmod +x ./scripts/*.sh
+./scripts/setup.sh
 ```
 
 ### 2. Running the Application
