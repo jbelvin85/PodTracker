@@ -19,15 +19,21 @@ We will approach development in distinct phases to ensure a structured and manag
 
 ### Phase 1: Backend & Database Foundation (Current Focus)
 
-The goal of this phase is to build the core data structures and API endpoints that will power the application.
+The goal of this phase is to build the core data structures, API endpoints, and containerized development environment that will power the application.
 - **[x] Database Schema:** Define the complete Prisma schema for all core models. (Initial `User`, `Deck`, and `Pod` models complete).
+- **[ ] Docker Environment:** Containerize the backend and database for consistent local development.
+  - **[ ]** Create Dockerfile for backend service (Node.js + dependencies).
+  - **[ ]** Define docker-compose.yml with services for backend and postgres.
+  - **[ ]** Configure persistent database volumes for Postgres.
+  - **[ ]** Add environment variable handling (.env.docker).
+  - **[ ]** Create helper scripts (docker-up.sh, docker-down.sh, docker-rebuild.sh) for common workflows.
+  - **[ ]** Verify Prisma migrations and testing run successfully inside containers.
 
 - **[ ] User Authentication:** Implement secure user registration and login endpoints using JWT.
   - **[x]** Implement registration/login controller logic.
   - **[x]** Add Zod validation for auth endpoints.
   - **[x]** Add JWT-based route protection middleware.
 - **[ ] Core CRUD APIs:** Create and test the API endpoints for managing Users, Decks, and Pods.
-- **[x] Tooling & DX:** Establish helper scripts (`git-push.sh`, `git-pull.sh`, `deploy.sh`) to streamline common development workflows.
 - **[x] Testing Environment:** Establish a robust testing setup for the backend using Jest and Supertest. (Test database infrastructure configured. **Note: Test execution is currently blocked by pending Docker installation.**).
 
 ### Phase 2: Core Frontend Implementation

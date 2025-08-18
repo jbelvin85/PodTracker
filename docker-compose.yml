@@ -39,7 +39,7 @@ services:
     container_name: podtracker-backend
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     ports:
       - "${BACKEND_PORT:-3001}:3001"
     depends_on:

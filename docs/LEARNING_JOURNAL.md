@@ -133,6 +133,25 @@ When you run `docker-compose up --build`, you're basically tapping all your land
 
 **In short: Docker is our rules engine. It gives us a powerful, predictable, and portable development environment that's ready to track our Magic games.**
 
+### Part 3: Environment Variables - Setting Up Your Mana Pool
+
+Just as a Magic player needs to ensure their mana base is properly set up before a game, our Docker environment relies on **environment variables** to configure its services. These variables act like specific mana symbols, telling our application how to connect to databases, set up authentication secrets, and more.
+
+You might have encountered a warning like:
+`WARN[0000] The "TEST_DATABASE_URL" variable is not set. Defaulting to a blank string.`
+
+This warning indicates that a required environment variable, `TEST_DATABASE_URL` in this case, was not found in your environment when Docker Compose was building or starting containers. Docker Compose looks for these variables in a `.env` file in the root of your project by default.
+
+**The Solution: Your `.env` File**
+
+Think of the `.env` file as your personal "mana pool" setup. It's where you declare all the specific mana (variables) your application needs to function.
+
+1.  **Create a `.env` file:** In the root directory of your `podtracker` project, create a new file named `.env`.
+2.  **Copy from `.env.example`:** The project provides a `.env.example` file. This file is like a template, showing you all the environment variables your application expects. Copy the contents of `.env.example` into your newly created `.env` file.
+3.  **Customize (if needed):** For development, the default values in `.env.example` are usually sufficient. However, you might need to adjust values like `POSTGRES_USER`, `POSTGRES_PASSWORD`, or `DATABASE_URL` if your local setup differs.
+
+By creating and populating the `.env` file, you ensure that Docker Compose has access to all the necessary environment variables, resolving warnings like the `TEST_DATABASE_URL` one and allowing your application to connect to its services correctly. It's like ensuring you have all the right lands tapped before casting your spells!
+
 ---
 
 ## Chapter 2: The Command Zone - Our Backend Stack

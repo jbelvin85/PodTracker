@@ -30,15 +30,48 @@ echo "   - Permissions set for .sh files in scripts/."
 # --- 3. Define Default Environment Variables ---
 # These will be written to the root .env file and used by docker-compose
 # and to generate other .env files.
-export POSTGRES_USER=${POSTGRES_USER:-postgres}
-export POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
 export POSTGRES_DB=${POSTGRES_DB:-podtracker}
 export DB_PORT=${DB_PORT:-5432}
 export TEST_DB_PORT=${TEST_DB_PORT:-5433}
 export BACKEND_PORT=${BACKEND_PORT:-3001}
 export FRONTEND_PORT=${FRONTEND_PORT:-5173}
-export JWT_SECRET=${JWT_SECRET:-"a-super-secret-jwt-secret-for-development"}
-export TEST_JWT_SECRET=${TEST_JWT_SECRET:-"a-super-secret-jwt-secret-for-testing"}
+
+# Prompt for PostgreSQL User
+if [ -z "$POSTGRES_USER" ]; then
+  read -p "Enter PostgreSQL username (default: postgres): " input_user
+  export POSTGRES_USER=${input_user:-postgres}
+fi
+
+# Prompt for PostgreSQL Password
+if [ -z "$POSTGRES_PASSWORD" ]; then
+  read -s -p "Enter PostgreSQL password (default: postgres): " input_password
+  export POSTGRES_PASSWORD=${input_password:-postgres}
+  echo # Add a newline after the silent password input
+fi
+
+# Generate or prompt for JWT_SECRET
+if [ -z "$JWT_SECRET" ]; then
+  read -p "Generate a random JWT_SECRET? (y/N): " generate_jwt
+  if [[ "$generate_jwt" =~ ^[yY]$ ]]; then
+    export JWT_SECRET=$(openssl rand -base64 32)
+    echo "Generated JWT_SECRET: ${JWT_SECRET}"
+  else
+    read -p "Enter JWT_SECRET: " input_jwt_secret
+    export JWT_SECRET=${input_jwt_secret}
+  fi
+fi
+
+# Generate or prompt for TEST_JWT_SECRET
+if [ -z "$TEST_JWT_SECRET" ]; then
+  read -p "Generate a random TEST_JWT_SECRET? (y/N): " generate_test_jwt
+  if [[ "$generate_test_jwt" =~ ^[yY]$ ]]; then
+    export TEST_JWT_SECRET=$(openssl rand -base64 32)
+    echo "Generated TEST_JWT_SECRET: ${TEST_JWT_SECRET}"
+  else
+    read -p "Enter TEST_JWT_SECRET: " input_test_jwt_secret
+    export TEST_JWT_SECRET=${input_test_jwt_secret}
+  fi
+fi
 
 # --- 4. Create root .env file for Docker Compose ---
 echo "3. Setting up root .env file for Docker Compose..."
@@ -96,13 +129,24 @@ fi
 echo "5. Installing Node.js dependencies..."
 npm install
 
-# --- 7. Generate Prisma Client ---
-echo "6. Generating Prisma Client..."
+# --- 7. Generate Prisma Client and Apply Migrations ---
+echo "6. Generating Prisma Client and Applying Migrations..."
+# For development, `prisma db push` is faster and creates the schema directly.
+# For production, `prisma migrate deploy` is used to apply pending migrations.
+# We'll use db push for initial setup and development convenience.
+npx prisma db push --accept-data-loss
+
+# Generate Prisma Client
 npx prisma generate
 
 echo ""
 echo "--- ✅ Project Setup Complete! ---"
-echo "Next step: Run './scripts/deploy.sh' to build and start the application."
 
-echo "Next step: Starting application deployment..."
-./scripts/deploy.sh
+# Call the appropriate deploy script based on OS
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+  echo "Next step: Starting application deployment (Windows)..."
+  powershell.exe -File ".\scripts\deploy.ps1"
+else
+  echo "Next step: Starting application deployment (Linux/macOS)..."
+  ./scripts/deploy.sh
+fi

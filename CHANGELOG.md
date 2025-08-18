@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Documentation:** Added a new section to `docs/LEARNING_JOURNAL.md` explaining environment variables and how to resolve the `TEST_DATABASE_URL` warning.
+
 ## [0.1.6] - 2025-08-17
 ### Added
 - **Documentation:** Created `docs/GEMINI_CONTEXT.md` for internal agent notes and technical context.
