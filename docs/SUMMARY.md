@@ -62,3 +62,7 @@ PodTracker follows a standard three-tier web architecture, containerized for con
 ## 5. Development Workflow
 
 To ensure a structured and stable development process, PodTracker utilizes a **feature branching workflow**. All new features, bug fixes, and significant changes are developed on dedicated branches, which are then integrated into the `main` branch after review. This approach promotes isolation, collaboration, and maintains the stability of the main codebase.
+
+## 6. Documentation
+
+- [GEMINI.md](GEMINI.md): Instructions and context for the Gemini CLI.

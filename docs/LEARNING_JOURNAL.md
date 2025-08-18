@@ -2,7 +2,7 @@
 
 Welcome to the PodTracker Learning Journal. This document serves as a living textbook, designed to demystify the process of building a modern Progressive Web Application (PWA) by using the PodTracker project as a practical, real-world example.
 
-We will explore the core concepts, technologies, and architectural patterns involved in developing a full-stack PWA, from backend services and database design to frontend implementation and deployment. Each section will break down complex topics into understandable components, providing insights into the "why" behind our technical choices and how they contribute to a robust and scalable application.
+We will explore the core concepts, technologies, and architectural patterns involved in developing a full-stack PWA, from backend services and database design to frontend implementation and deployment. Furthermore, this journal will directly reference our current codebase and provide concrete examples for each step of our build, deployment, and testing processes, ensuring a clear path for building the application from the ground up.
 
 Consider this your comprehensive guide to navigating the evolving landscape of web development, with PodTracker as your hands-on case study.
 
@@ -12,81 +12,135 @@ Let's begin our journey!
 
 ## Table of Contents
 
-- **Chapter 1: The Mana Base** - Our Docker Environment
-- **Chapter 2: The Command Zone** - Node.js, Express & TypeScript
-- **Chapter 3: The Library** - Prisma & PostgreSQL
-- **Chapter 4: The Battlefield** - Our Frontend Stack
+- **Chapter 0: The First Draw - Setting Up Your Environment**
+    - Part 1: Prerequisites (Git, Docker)
+    - Part 2: Cloning the Repository
+    - Part 3: Initial Setup Script (`setup.sh`)
+    - Part 4: Environment Variables (`.env`)
+- **Chapter 1: The Mana Base - Our Docker Environment**
+    - Part 1: The Old Problem: The "Budget Net-Deck" Problem
+    - Part 2: The New Solution: The Perfect Net-Deck (with Docker)
+    - Part 3: How We're Doing It: The Decklist and the Tournament Organizer
+    - Part 4: Environment Variables - Setting Up Your Mana Base
+- **Chapter 2: The Command Zone - Our Backend Stack**
+    - Part 1: Node.js - JavaScript Gets an Emblem
+    - Part 2: Express.js - Our Pre-built Control Shell
+    - Part 3: TypeScript - Playing with a Judge
+    - Part 4: Zod - The Mana Cost
+    - Part 5: Express Middleware - Instants and Triggered Abilities
+- **Chapter 3: The Library - Our Database Stack**
+    - Part 1: PostgreSQL - The Great Library of Alexandria
+    - Part 2: Prisma - Our Demonic Tutor
+    - Part 3: The Schema and Migrations - The Blueprint and the Re-Sleeving Spell
+    - Part 4: The Singleton Pattern - A Single, Loyal Tutor
+- **Chapter 4: The Battlefield - Our Frontend Stack**
+    - Part 1: React - Our Hand of Cards
+    - Part 2: Vite - Our Fast Scry
+    - Part 3: SWR - Our Gitaxian Probe
+    - Part 4: Tailwind CSS - Our Sigil of Distinction
+    - Part 5: Progressive Web Applications (PWAs) - Our Indestructible Enchantment
+    - Part 6: Putting It All Together: The Game in Play
 - **Chapter 5: The Primer - A Spell on the Stack**
 - **Chapter 6: The Scryfall - Our Testing Strategy**
+    - Part 1: Jest - Goldfishing Our Functions (Unit Tests)
+    - Part 2: Supertest - Scrimming Our API (Integration Tests)
 - **Chapter 7: The Branching Paths** - Our Git Workflow
+    - Part 1: Feature Branches - Exploring New Strategies
+    - Part 2: Rebase vs. Merge - Rewriting History vs. Documenting History
+    - Part 3: The `git-push.sh` Script - Your Automated Guide
+    - Part 4: Pull Requests (PRs) - Proposing Your Rule Change
+- **Chapter 8: Casting the Spell - Building and Running PodTracker**
+    - Part 1: Building with Docker Compose
+    - Part 2: Accessing the Application
+    - Part 3: Running Tests
 
 ---
 
-## Chapter 7: The Branching Paths - Our Git Workflow
+## Chapter 0: The First Draw - Setting Up Your Environment
 
-In Magic: The Gathering, a single game can diverge into countless possibilities based on the choices players make. Similarly, in software development, our codebase is constantly evolving, and we need a way to manage multiple lines of development simultaneously without chaos. This is where **Git branching** comes in.
+Just as every game of Magic: The Gathering begins with drawing your opening hand, building a software project from the ground up starts with setting up your local development environment. This chapter will guide you through the initial steps to prepare your system and get the PodTracker repository onto your machine, ready for its first build.
 
-Think of your `main` branch as the **"Official Tournament Rules"** document. It's the stable, agreed-upon version of the game. You don't just scribble new rules directly onto it. Instead, you propose changes, test them, and only once they're proven, do they become part of the official rules.
+### Part 1: Prerequisites - Gathering Your Lands
 
-### Part 1: Feature Branches - Exploring New Strategies
+Before you can cast any spells, you need to ensure you have the fundamental resources (lands) available. For PodTracker, these are **Git** and **Docker**.
 
-**What is it?** A **feature branch** is like taking a copy of the "Official Tournament Rules" and going into a separate room to experiment with a new, untested rule change. You can modify it, playtest it, and see how it affects the game without impacting the ongoing tournament (your main development line).
+*   **Git:** A version control system essential for cloning the repository and managing code changes.
+    *   **Installation:** Follow the instructions on the official Git website: [https://git-scm.com/downloads](https://git-scm.com/downloads)
+    *   **Verification:** Open your terminal or command prompt and run:
+        ```bash
+        git --version
+        ```
+        You should see the installed Git version.
 
-Every new feature, bug fix, or significant change in PodTracker should be developed on its own dedicated feature branch.
+*   **Docker:** Our entire application is containerized using Docker, providing a consistent and isolated development environment. You'll need Docker Desktop (for Windows/macOS) or Docker Engine/CLI (for Linux).
+    *   **Installation:** Follow the instructions on the official Docker website: [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
+    *   **Verification:** Open your terminal or command prompt and run:
+        ```bash
+        docker --version
+        docker compose version
+        ```
+        You should see the installed Docker and Docker Compose versions. Ensure Docker Desktop is running if you are on Windows or macOS.
 
-**Why is this our strategy?**
-1.  **Isolation:** Your experimental rule changes don't break the main game. Your new code doesn't interfere with the stable `main` branch. This means the `main` branch is always in a deployable state.
-2.  **Collaboration:** Multiple players (developers) can experiment with different rule changes (features) simultaneously in their own rooms without stepping on each other's toes.
-3.  **Review:** Once you're happy with your new rule, you propose it back to the tournament organizers (via a Pull Request). They review your changes, suggest improvements, and only then, if approved, does it become part of the official rules.
+### Part 2: Cloning the Repository - Drawing Your Opening Hand
 
-**Naming Conventions:** Just like a good rule proposal has a clear title, our feature branches should be named descriptively. We recommend:
-*   `feature/descriptive-feature-name` (e.g., `feature/add-user-profile`)
-*   `bugfix/issue-description` (e.g., `bugfix/login-error-handling`)
-*   `refactor/area-of-refactor` (e.g., `refactor/auth-middleware`)
+With your prerequisites in place, it's time to get the PodTracker codebase onto your local machine. This is akin to drawing your opening hand—you're getting all the cards you need to start the game.
 
-### Part 2: Rebase vs. Merge - Rewriting History vs. Documenting History
+Navigate to the directory where you want to store the project in your terminal or command prompt, and then run the `git clone` command. Replace `<your-repo-url>` with the actual URL of your PodTracker Git repository (e.g., `https://github.com/your-username/podtracker.git`).
 
-When it's time to integrate your feature branch back into `main`, Git offers two primary strategies: **merge** and **rebase**.
+```bash
+git clone <your-repo-url>
+cd podtracker
+```
 
-**Merge (The "Side Quest" Analogy):**
-Imagine you went on a side quest. You completed it, and now you're back. A merge operation brings your side quest's history (your commits) and the main story's history together, creating a new "merge commit" that explicitly shows where the two paths joined. This preserves the exact history of your feature branch.
+This command will download the entire project to a new `podtracker` directory and then change your current directory into it.
 
-**Rebase (The "Linear Story" Analogy):**
-Imagine you went on a side quest, but when you return, you rewrite your personal diary to make it seem like you were always on the main path, just doing your side quest activities *after* everything else that happened on the main path. A rebase operation moves your feature branch's commits to the "tip" of the `main` branch, effectively rewriting your branch's history to be a linear extension of `main`.
+### Part 3: Initial Setup Script - Mulligans and Mana Fixing
 
-**Why PodTracker Uses Rebase for Feature Branches:**
-For feature branches, PodTracker prefers a **rebase workflow** before pushing to the remote. Our `git-push.sh` script automates this.
+The PodTracker project includes a convenient setup script (`setup.sh` for Linux/macOS or `setup.ps1` for Windows PowerShell) that automates several initial configuration steps. This script is like taking a "mulligan" — it ensures your initial setup is optimized and ready to play.
 
-*   **Cleaner History:** Rebasing creates a linear project history, which is easier to read and understand. It avoids the "merge commit" noise that can clutter the commit graph, especially with frequent merges.
-*   **Easier Debugging:** A linear history makes it simpler to use `git bisect` to find the commit that introduced a bug.
-*   **`git-push.sh` and `force-with-lease`:** Our `git-push.sh` script performs a `git rebase origin/main` (or `origin/develop`) and then a `git push --force-with-lease`.
-    *   `--force-with-lease` is a safer version of `git push --force`. It only force-pushes if your local branch is based on the same remote state as when you last pulled. This prevents you from accidentally overwriting someone else's work if they pushed changes to the same branch in the interim.
+First, if you are on Linux/macOS, you need to make the script executable:
 
-### Part 3: The `git-push.sh` Script - Your Automated Guide
+```bash
+chmod +x ./scripts/*.sh
+```
 
-Our `git-push.sh` script is designed to streamline this process for your feature branches. When you run it:
-1.  It stages all your changes (`git add .`).
-2.  It prompts you for a commit message (`git commit -m "..."`).
-3.  It fetches the latest changes from `origin` (`git fetch origin`).
-4.  It rebases your current feature branch onto `origin/main` (or `origin/develop`) (`git rebase origin/main`).
-5.  It then pushes your rebased branch to the remote using `git push origin <your-branch-name> --force-with-lease`.
+Now, run the setup script from the project root directory:
 
-**Important:** This script explicitly prevents you from running it on the `main` or `develop` branches. These branches are considered stable and should only be updated via merges (typically from Pull Requests) to maintain a clear, non-rewritten history.
+**For Linux/macOS (Bash):**
+```bash
+./scripts/setup.sh
+```
 
-### Part 4: Pull Requests (PRs) - Proposing Your Rule Change
+**For Windows (PowerShell):**
+```powershell
+./scripts/setup.ps1
+```
 
-Once your feature branch is complete and pushed to the remote, the final step is to open a **Pull Request (PR)** (also known as a Merge Request in some systems like GitLab).
+This script will:
+*   Install Node.js dependencies for both the `backend` and `frontend` services.
+*   Create the necessary `.env` configuration file in the project root, copying from `.env.example`.
 
-**The Analogy:** A Pull Request is your formal proposal to the tournament organizers to incorporate your new rule change into the "Official Tournament Rules" (`main` branch).
+### Part 4: Environment Variables - Setting Up Your Mana Base
 
-**What happens in a PR?**
-1.  **Code Review:** Other developers review your code, provide feedback, and suggest improvements. This is crucial for catching bugs, ensuring code quality, and sharing knowledge.
-2.  **Automated Checks:** CI/CD pipelines often run automated tests, linters, and build checks to ensure your changes don't break anything and adhere to project standards.
-3.  **Discussion:** Any discussions about the feature, design choices, or potential issues happen directly within the PR.
-4.  **Approval & Merge:** Once the code is reviewed, all checks pass, and approvals are given, your feature branch is merged into the `main` branch.
+Just as a Magic player needs to ensure their mana base is properly set up before a game, our Docker environment relies on **environment variables** to configure its services. These variables act like specific mana symbols, telling our application how to connect to databases, set up authentication secrets, and more.
 
-By following this feature branching workflow, we ensure that PodTracker's codebase remains stable, our development process is collaborative, and our history is clean and easy to follow. It's how we build a robust and reliable application, one well-tested feature at a time.
-**
+The `setup.sh` (or `setup.ps1`) script automatically creates a `.env` file in your project root by copying the contents of `.env.example`. This `.env` file is crucial as it holds sensitive information and configuration specific to your local environment.
+
+You can inspect the contents of your newly created `.env` file:
+
+**For Linux/macOS (Bash):**
+```bash
+cat .env
+```
+
+**For Windows (PowerShell):**
+```powershell
+Get-Content .env
+```
+
+For development, the default values in `.env.example` are usually sufficient. However, you might need to adjust values like `POSTGRES_USER`, `POSTGRES_PASSWORD`, or `DATABASE_URL` if your local setup differs or if you are using a custom Docker network.
+
+By creating and populating the `.env` file, you ensure that Docker Compose has access to all the necessary environment variables, allowing your application to connect to its services correctly. It's like ensuring you have all the right lands tapped before casting your spells!
 
 ---
 
@@ -148,7 +202,7 @@ Think of the `.env` file as your personal "mana pool" setup. It's where you decl
 
 1.  **Create a `.env` file:** In the root directory of your `podtracker` project, create a new file named `.env`.
 2.  **Copy from `.env.example`:** The project provides a `.env.example` file. This file is like a template, showing you all the environment variables your application expects. Copy the contents of `.env.example` into your newly created `.env` file.
-3.  **Customize (if needed):** For development, the default values in `.env.example` are usually sufficient. However, you might need to adjust values like `POSTGRES_USER`, `POSTGRES_PASSWORD`, or `DATABASE_URL` if your local setup differs.
+3.  **Customize (if needed):** For development, the default values in `.env.example` are usually sufficient. However, you might need to adjust values like `POSTGRES_USER`, `POSTGRES_PASSWORD`, or `DATABASE_URL` if your local setup differs or if you are using a custom Docker network.
 
 By creating and populating the `.env` file, you ensure that Docker Compose has access to all the necessary environment variables, resolving warnings like the `TEST_DATABASE_URL` one and allowing your application to connect to its services correctly. It's like ensuring you have all the right lands tapped before casting your spells!
 
@@ -252,7 +306,7 @@ Postgres is old, rock-solid, and speaks a powerful, ancient language called **SQ
 
 `prisma.user.findUnique({ where: { email: 'test@example.com' } })`
 
-Prisma translates our simple request into the complex SQL for us. But the real magic is **type safety**. When we use Prisma to fetch a user, TypeScript knows *exactly* what that user object looks like. It knows it has an `id`, an `email`, and a `username`. It's like tutoring for a `Sol Ring` and knowing for a fact you're getting a `Sol Ring`, not accidentally grabbing a `Swamp`. This autocompletion and error-checking in our code editor is a massive quality-of-life improvement.
+Prisma translates our simple request into the complex SQL for us. But the real magic is **type safety**. When we use Prisma to fetch a user, TypeScript knows *exactly* what that user object looks like. It knows it has an an `id`, an `email`, and a `username`. It's like tutoring for a `Sol Ring` and knowing for a fact you're getting a `Sol Ring`, not accidentally grabbing a `Swamp`. This autocompletion and error-checking in our code editor is a massive quality-of-life improvement.
 
 ### Part 3: The Schema and Migrations - The Blueprint and the Re-Sleeving Spell
 
@@ -375,3 +429,131 @@ With Supertest, we can ask much more complex questions:
 This tests the entire "stack" for that route: the Express router, our Zod and JWT middleware, the controller logic, and even its interaction with a test database. It's how we ensure our entire game plan works from start to finish, giving us the highest confidence that our backend is behaving as expected.
 
 By combining focused unit tests (goldfishing) with broader integration tests (scrimming), we create a comprehensive test suite that ensures PodTracker is not just a powerful application, but a reliable one.
+
+---
+
+## Chapter 7: The Branching Paths - Our Git Workflow
+
+In Magic: The Gathering, a single game can diverge into countless possibilities based on the choices players make. Similarly, in software development, our codebase is constantly evolving, and we need a way to manage multiple lines of development simultaneously without chaos. This is where **Git branching** comes in.
+
+Think of your `main` branch as the **"Official Tournament Rules"** document. It's the stable, agreed-upon version of the game. You don't just scribble new rules directly onto it. Instead, you propose changes, test them, and only once they're proven, do they become part of the official rules.
+
+### Part 1: Feature Branches - Exploring New Strategies
+
+**What is it?** A **feature branch** is like taking a copy of the "Official Tournament Rules" and going into a separate room to experiment with a new, untested rule change. You can modify it, playtest it, and see how it affects the game without impacting the ongoing tournament (your main development line).
+
+Every new feature, bug fix, or significant change in PodTracker should be developed on its own dedicated feature branch.
+
+**Why is this our strategy?**
+1.  **Isolation:** Your experimental rule changes don't break the main game. Your new code doesn't interfere with the stable `main` branch. This means the `main` branch is always in a deployable state.
+2.  **Collaboration:** Multiple players (developers) can experiment with different rule changes (features) simultaneously in their own rooms without stepping on each other's toes.
+3.  **Review:** Once you're happy with your new rule, you propose it back to the tournament organizers (via a Pull Request). They review your changes, suggest improvements, and only then, if approved, does it become part of the official rules.
+
+**Naming Conventions:** Just like a good rule proposal has a clear title, our feature branches should be named descriptively. We recommend:
+*   `feature/descriptive-feature-name` (e.g., `feature/add-user-profile`)
+*   `bugfix/issue-description` (e.g., `bugfix/login-error-handling`)
+*   `refactor/area-of-refactor` (e.g., `refactor/auth-middleware`)
+
+### Part 2: Rebase vs. Merge - Rewriting History vs. Documenting History
+
+When it's time to integrate your feature branch back into `main`, Git offers two primary strategies: **merge** and **rebase**.
+
+**Merge (The "Side Quest" Analogy):**
+Imagine you went on a side quest. You completed it, and now you're back. A merge operation brings your side quest's history (your commits) and the main story's history together, creating a new "merge commit" that explicitly shows where the two paths joined. This preserves the exact history of your feature branch.
+
+**Rebase (The "Linear Story" Analogy):**
+Imagine you went on a side quest, but when you return, you rewrite your personal diary to make it seem like you were always on the main path, just doing your side quest activities *after* everything else that happened on the main path. A rebase operation moves your feature branch's commits to the "tip" of the `main` branch, effectively rewriting your branch's history to be a linear extension of `main`.
+
+**Why PodTracker Uses Rebase for Feature Branches:**
+For feature branches, PodTracker prefers a **rebase workflow** before pushing to the remote. Our `git-push.sh` script automates this.
+
+*   **Cleaner History:** Rebasing creates a linear project history, which is easier to read and understand. It avoids the "merge commit" noise that can clutter the commit graph, especially with frequent merges.
+*   **Easier Debugging:** A linear history makes it simpler to use `git bisect` to find the commit that introduced a bug.
+*   **`git-push.sh` and `force-with-lease`:** Our `git-push.sh` script performs a `git rebase origin/main` (or `origin/develop`) and then a `git push --force-with-lease`.
+    *   `--force-with-lease` is a safer version of `git push --force`. It only force-pushes if your local branch is based on the same remote state as when you last pulled. This prevents you from accidentally overwriting someone else's work if they pushed changes to the same branch in the interim.
+
+### Part 3: The `git-push.sh` Script - Your Automated Guide
+
+Our `git-push.sh` script is designed to streamline this process for your feature branches. When you run it:
+1.  It stages all your changes (`git add .`).
+2.  It prompts you for a commit message (`git commit -m "..."`).
+3.  It fetches the latest changes from `origin` (`git fetch origin`).
+4.  It rebases your current feature branch onto `origin/main` (or `origin/develop`) (`git rebase origin/main`).
+5.  It then pushes your rebased branch to the remote using `git push origin <your-branch-name> --force-with-lease`.
+
+**Important:** This script explicitly prevents you from running it on the `main` or `develop` branches. These branches are considered stable and should only be updated via merges (typically from Pull Requests) to maintain a clear, non-rewritten history.
+
+### Part 4: Pull Requests (PRs) - Proposing Your Rule Change
+
+Once your feature branch is complete and pushed to the remote, the final step is to open a **Pull Request (PR)** (also known as a Merge Request in some systems like GitLab).
+
+**The Analogy:** A Pull Request is your formal proposal to the tournament organizers to incorporate your new rule change into the "Official Tournament Rules" (`main` branch).
+
+**What happens in a PR?**
+1.  **Code Review:** Other developers review your code, provide feedback, and suggest improvements. This is crucial for catching bugs, ensuring code quality, and sharing knowledge.
+2.  **Automated Checks:** CI/CD pipelines often run automated tests, linters, and build checks to ensure your changes don't break anything and adhere to project standards.
+3.  **Discussion:** Any discussions about the feature, design choices, or potential issues happen directly within the PR.
+4.  **Approval & Merge:** Once the code is reviewed, all checks pass, and approvals are given, your feature branch is merged into the `main` branch.
+
+By following this feature branching workflow, we ensure that PodTracker's codebase remains stable, our development process is collaborative, and our history is clean and easy to follow. It's how we build a robust and reliable application, one well-tested feature at a time.
+
+---
+
+## Chapter 8: Casting the Spell - Building and Running PodTracker
+
+With your environment set up and the repository cloned, it's time to bring PodTracker to life. This chapter will guide you through building the Docker images, running the application, and verifying its functionality. This is where you "cast the spell" and see your application manifest on your local machine.
+
+### Part 1: Building with Docker Compose - Genesis Wave
+
+Docker Compose allows us to define and run multi-container Docker applications. Our `docker-compose.yml` file acts as the blueprint for our entire application stack (backend, frontend, database). Building and running it is like casting a powerful `Genesis Wave`—it brings all the necessary components into play at once.
+
+Navigate to the root of your `podtracker` project in your terminal or command prompt.
+
+```bash
+docker compose up --build -d
+```
+
+*   `docker compose up`: This command starts the services defined in `docker-compose.yml`.
+*   `--build`: This flag tells Docker Compose to build the images for your services before starting them. This is crucial for the first time you run the application or after any changes to the `Dockerfile`s.
+*   `-d`: This flag runs the containers in "detached" mode, meaning they will run in the background, freeing up your terminal.
+
+This process might take a few minutes, especially on the first run, as Docker downloads base images and builds your application's layers. You can monitor the build progress in your terminal.
+
+### Part 2: Accessing the Application - Entering the Battlefield
+
+Once Docker Compose has finished building and starting the services, your PodTracker application will be accessible via your web browser.
+
+*   **Frontend (React):** `http://localhost:5173`
+*   **Backend (Express API):** `http://localhost:3001`
+
+Open your web browser and navigate to `http://localhost:5173`. You should see the PodTracker frontend application. If you see a blank page or an error, ensure all Docker containers are running correctly by checking their status:
+
+```bash
+docker ps
+```
+
+This command lists all running Docker containers. You should see entries for `podtracker-frontend-1`, `podtracker-backend-1`, and `podtracker-db-1` (or similar names depending on your Docker Compose project name).
+
+### Part 3: Running Tests - Scrying for Confidence
+
+While the application is running, you can also execute the test suite to ensure everything is functioning as expected. Our tests are designed to verify the core logic and API endpoints.
+
+First, you'll need to execute commands within the `backend` container.
+
+**For Linux/macOS (Bash):**
+```bash
+docker compose exec backend npm test
+```
+
+**For Windows (PowerShell):**
+```powershell
+docker compose exec backend npm test
+```
+
+*   `docker compose exec backend`: This command allows you to execute a command inside the `backend` service container.
+*   `npm test`: This is the command defined in our `backend/package.json` to run the test suite (using Jest and Supertest).
+
+**Note on Test Results:**
+In the early stages of development, or if certain features (like full user authentication) are not yet fully implemented, some tests might fail. This is expected. The goal here is to demonstrate how to run the tests. As development progresses and features are completed, the test suite should pass entirely.
+
+---
