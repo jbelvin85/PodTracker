@@ -1,0 +1,20 @@
+# Use the same base image as the backend for consistency
+FROM node:18-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to install dependencies
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose any ports if necessary for testing (e.g., if tests hit an internal server)
+# EXPOSE 3001
+
+# Command to run tests (this will be overridden by docker-compose for flexibility)
+CMD ["npm", "test"]

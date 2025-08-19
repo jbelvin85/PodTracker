@@ -1,7 +1,7 @@
 # PodTracker Project Goals
 
 ## Current Task
-- **Backend:** Finalize and test User Authentication.
+- **Git Workflow:** Created a new `develop` branch to facilitate ongoing development and feature integration.
 
 This document outlines the development goals for recreating and expanding upon the original PodTracker application. Our objective is to build a modern, robust, and scalable PWA using the technology stack defined in `docs/SUMMARY.md`.
 
