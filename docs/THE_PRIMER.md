@@ -1223,3 +1223,66 @@ With this configuration, running `npm run build` will not only create our optimi
 3.  Inject the necessary code into our `index.html` to register the Service Worker in the browser.
 
 By casting this `Indestructible` enchantment on our application, we provide our users with a faster, more reliable, and more engaging experience that truly bridges the gap between a website and a native app. The battlefield is now permanently under our control.
+
+---
+
+## Chapter 5: The Testing Strategy - *Scrying the Future*
+
+We have assembled a powerful deck. Our backend is a well-oiled machine, our database is a fortress of data, and our frontend is a dynamic and responsive battlefield. But how do we ensure our deck performs consistently? How do we prevent a new card from accidentally breaking our core combo? We need to **test** our creation.
+
+Testing is the art of scrying the future. It's a disciplined process of creating automated checks that verify our code behaves exactly as we expect. A comprehensive test suite is a safety net that allows us to refactor code, add new features, and upgrade dependencies with confidence, knowing that if we break something important, our tests will fail and alert us immediately.
+
+In this chapter, we will explore the two primary layers of our testing strategy: unit testing and integration testing.
+
+### Part 1: Unit Testing with Jest - *Goldfishing the Combo*
+
+In Magic, "goldfishing" is the act of playing your deck against an imaginary, non-interactive opponent. You draw your opening hand, play your lands, and execute your combos as if you had no disruption. The goal isn't to simulate a real game, but to answer a simple question: "Does my deck do what it's designed to do?" Can it execute its core combo consistently and efficiently?
+
+**Unit testing** is the software equivalent of goldfishing. A "unit" is the smallest testable piece of our application, typically a single function or component. A unit test isolates this tiny piece of code completely from the rest of the application and verifies that it works correctly on its own.
+
+For example, we might have a utility function that formats a Scryfall card ID into a full image URL. A unit test for this function would not involve the database, the API, or the React component that uses it. It would simply call the function with a known input (the card ID) and assert that it returns the expected output (the correct URL). It answers the question: "Does this specific function do its one job correctly?"
+
+For this, we use **Jest**, a delightful JavaScript testing framework with a focus on simplicity. Jest provides us with all the tools we need to write, run, and structure our tests.
+
+Let's imagine we have a simple utility function in our backend:
+
+```typescript
+// backend/src/utils/slugify.ts
+export const slugify = (text: string): string => {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/\s+/g, '-')       // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
+    .replace(/\-\-+/g, '-')     // Replace multiple - with single -
+    .replace(/^-+/, '')          // Trim - from start of text
+    .replace(/-+$/, '');         // Trim - from end of text
+};
+```
+
+A unit test for this function, written with Jest, would look like this:
+
+```typescript
+// backend/src/utils/slugify.test.ts
+import { slugify } from './slugify';
+
+describe('slugify', () => {
+  it('should convert spaces to hyphens', () => {
+    expect(slugify('hello world')).toBe('hello-world');
+  });
+
+  it('should remove special characters', () => {
+    expect(slugify('hello!@#$%^&*() world')).toBe('hello-world');
+  });
+
+  it('should handle multiple spaces', () => {
+    expect(slugify('hello   world')).toBe('hello-world');
+  });
+});
+```
+
+- `describe`: Groups related tests together into a test suite.
+- `it`: Defines an individual test case, with a clear description of what it's testing.
+- `expect` and `.toBe`: This is an "assertion." We `expect` our function's output to `.toBe` a specific value.
+
+By goldfishing each small piece of our application, we build a foundation of confidence that each individual card in our deck is functioning perfectly.
