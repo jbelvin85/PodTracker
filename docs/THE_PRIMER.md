@@ -1164,3 +1164,62 @@ Without writing a single line of custom CSS, we have created a visually appealin
 This approach keeps our styling co-located with our component logic, making it easy to see what an element will look like just by reading its class names. It encourages consistency by using a predefined design system for spacing, colors, and typography, and it eliminates the need to ever worry about naming CSS classes again.
 
 Tailwind CSS is the tool that allows us to bestow a `Sigil of Distinction` upon every component, ensuring our application is not only functional but also a pleasure to use.
+
+---
+
+### Part 5: Progressive Web App (PWA) Features - *The Indestructible Enchantment*
+
+In Magic, an `Indestructible` enchantment is a permanent that's incredibly resilient. It survives board wipes and most forms of removal. It stays on the battlefield, providing its benefit, even when everything else is gone. It gives your board state a persistence that standard creatures and artifacts lack.
+
+A **Progressive Web Application (PWA)** gives our web app that same kind of resilience. It's a set of modern web technologies that allow a website to behave like a native application. It can be "installed" on a user's home screen, it can work offline, and it can send push notifications. It transforms our website from a transient document into a persistent, reliable tool.
+
+This is achieved through two key technologies:
+
+1.  **Web App Manifest (`manifest.json`):** This is a simple JSON file that tells the browser about our application. It defines the app's name, icons, start URL, and display mode (e.g., fullscreen). This manifest is what makes the "Add to Home Screen" prompt possible.
+
+2.  **Service Worker:** This is the true magic behind PWAs. A Service Worker is a special type of JavaScript file that the browser runs in the background, separate from the web page. It acts as a programmable proxy, intercepting all network requests made by the application. This allows us to implement powerful features like:
+    -   **Offline Caching:** We can tell the Service Worker to save key files (like our HTML, CSS, and JavaScript) to a local cache. When the user is offline and tries to access the app, the Service Worker can serve the files from the cache instead of the network, allowing the app to load and function without an internet connection.
+    -   **Background Sync:** If a user tries to perform an action while offline (like updating a life total), the Service Worker can save that request and then automatically send it to the server once the connection is restored.
+    -   **Push Notifications:** The Service Worker can listen for messages from a server even when the app isn't open, allowing us to deliver push notifications to the user.
+
+#### Our PWA Strategy with Vite
+
+Thankfully, we don't have to configure all of this from scratch. Our build tool, Vite, has excellent plugins that handle the heavy lifting. We will use the `vite-plugin-pwa` package to automatically generate our `manifest.json` and a production-ready Service Worker based on a simple configuration in our `vite.config.js` file.
+
+```javascript
+// frontend/vite.config.js (with PWA plugin)
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      manifest: {
+        name: 'PodTracker',
+        short_name: 'PodTracker',
+        description: 'Magic: The Gathering Commander life tracker and game history.',
+        theme_color: '#ffffff',
+        icons: [
+          // ... icon definitions
+        ],
+      },
+    }),
+  ],
+  server: {
+    proxy: {
+      '/api': 'http://backend:3001',
+    },
+  },
+});
+```
+
+With this configuration, running `npm run build` will not only create our optimized frontend code but also:
+1.  Generate a `manifest.json` file with all our app's metadata.
+2.  Create a highly optimized Service Worker that automatically caches all our static assets.
+3.  Inject the necessary code into our `index.html` to register the Service Worker in the browser.
+
+By casting this `Indestructible` enchantment on our application, we provide our users with a faster, more reliable, and more engaging experience that truly bridges the gap between a website and a native app. The battlefield is now permanently under our control.
