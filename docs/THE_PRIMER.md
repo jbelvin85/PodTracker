@@ -1286,3 +1286,71 @@ describe('slugify', () => {
 - `expect` and `.toBe`: This is an "assertion." We `expect` our function's output to `.toBe` a specific value.
 
 By goldfishing each small piece of our application, we build a foundation of confidence that each individual card in our deck is functioning perfectly.
+
+---
+
+### Part 2: API Integration Testing with Supertest - *Scrimming the Matchup*
+
+Goldfishing is essential, but it can't tell you how your deck will perform against a real opponent. For that, you need to **scrim** (a slang term for a scrimmage or practice match). You need to shuffle up, sit across from another deck, and see how your strategies and cards interact in a real game environment.
+
+**Integration testing** is our version of scrimming. While unit tests check functions in isolation, integration tests check how multiple parts of our system work together. For our backend, this means testing our API endpoints to ensure that the routes, controllers, middleware, and database all play nicely with each other.
+
+An integration test simulates a real HTTP request to our API and asserts that we get the correct response. It answers questions like:
+
+-   If I send a `POST` request to `/api/auth/register` with valid data, does it actually create a new user in the database?
+-   If I try to access a protected route without a valid JWT, do I get a `401 Unauthorized` error?
+-   If I send invalid data, does my Zod validation middleware catch it and return a `400 Bad Request` error?
+
+To write these tests, we use **Supertest**, a library designed to work with HTTP servers like Express. It gives us a clean, chainable API for sending requests and asserting responses.
+
+#### Setting Up the Test Environment
+
+Crucially, our integration tests should **not** run against our development database. We don't want our tests to be polluted by existing data or to fill our main database with test users. This is why we defined a separate `test-db` service in our `docker-compose.yml`. Our test setup will ensure that before our tests run, the test database is clean and ready.
+
+Here's how an integration test for our registration endpoint might look:
+
+```typescript
+// backend/src/routes/auth.test.ts
+import request from 'supertest';
+import app from '../app'; // Assuming your express app is exported from app.ts
+import prisma from '../db';
+
+// Before each test, we clean the database to ensure a fresh start
+beforeEach(async () => {
+  await prisma.user.deleteMany({});
+});
+
+describe('POST /api/auth/register', () => {
+  it('should register a new user and return a token', async () => {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({
+        email: 'test@example.com',
+        password: 'password123',
+      })
+      .expect(201);
+
+    // Assert that the response contains a token
+    expect(res.body).toHaveProperty('token');
+
+    // Assert that the user was actually created in the database
+    const user = await prisma.user.findUnique({ where: { email: 'test@example.com' } });
+    expect(user).not.toBeNull();
+  });
+
+  it('should return a 400 error for invalid data', async () => {
+    await request(app)
+      .post('/api/auth/register')
+      .send({ email: 'not-an-email', password: 'short' })
+      .expect(400);
+  });
+});
+```
+
+In this test suite:
+1.  We use a `beforeEach` hook to wipe the `User` table clean before every single test, ensuring they are independent.
+2.  In the first test, we use `supertest` to send a `POST` request to our app. We `.send()` a valid payload and `.expect(201)` as the HTTP status code.
+3.  We then go further and use `prisma` to query the test database directly, confirming that the user was actually created.
+4.  In the second test, we send an invalid payload and assert that we receive the expected `400` error code from our validation middleware.
+
+By scrimming our API, we gain a much higher level of confidence. We're no longer just checking if individual cards work; we're ensuring our entire deck can execute its game plan from start to finish.
