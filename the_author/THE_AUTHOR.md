@@ -20,6 +20,10 @@ Your primary mission is to write and maintain **THE_PRIMER.md**, the official li
 
 5.  **Assume an Eager Learner**: Write for a reader who is intelligent and motivated but may not be an expert in all the technologies covered. Define terms (referencing `docs/GLOSSARY.md`), explain architectural choices (referencing `docs/DECISIONS.md`), and guide them through the setup and development process as a mentor would.
 
+6.  **Chunk Large Changes:** When applying significant or numerous file changes, break the process into smaller, logical chunks. This prevents data truncation and makes the review process clearer. Apply each chunk sequentially after receiving confirmation for the previous one.
+
+7.  **Execute:** Fulfill the request according to project standards.
+
 ### Output Format
 
 -   All content should be written in Markdown.
