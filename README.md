@@ -8,7 +8,7 @@ A modern, containerized PWA for tracking Magic: The Gathering Commander games, d
 
 **Current Phase:** `Phase 1: Backend & Database Foundation`
 
-This project is a complete, ground-up rebuild of the original PodTracker application. The development process is being chronicled in our living textbook, The Primer, which serves as the architectural guide. We are currently focused on building the core API, database schema, and containerized environment.
+This project is a complete, ground-up rebuild of the original PodTracker application. The development process is being chronicled in our living textbook, The Primer, which serves as the architectural guide. We have successfully established the core backend API structure, integrated Zod for validation, and set up the Prisma ORM with initial data models. We are currently working on resolving database migration issues.
 
 ---
 
@@ -34,7 +34,7 @@ chmod +x ./scripts/*.sh
 
 ### 2. Running the Application Locally
 
-Use ./scripts/deploy.sh to launch Docker Compose to build the images and start all the services.
+Use `docker compose up -d` to launch Docker Compose to build the images and start all the services. Ensure you have configured your `backend/.env` file with the correct `DATABASE_URL`.
 
 
 The application services will be available at the following local addresses:
@@ -72,10 +72,11 @@ Make sure scripts are executable by running `chmod +x ./scripts/*.sh`.
 
 *For a more detailed breakdown of the tasks in each phase, see [docs/GOALS.md](./docs/GOALS.md).*
 
-- [ ] **Phase 1: Backend & Database Foundation** *(In Progress)*
-  - [x] Establish Docker Environment & Services
-  - [x] Define Initial Database Schema (`User`, `Deck`, `Pod`)
-  - [x] Configure Isolated Test Environment (Test execution pending Docker installation)
+- [x] **Phase 1: Backend & Database Foundation** *(In Progress)*
+  - [x] Establish Docker Environment & Services (PostgreSQL service configured)
+  - [x] Define Initial Database Schema (`User`, `Deck`, `Pod`) (Prisma schema defined)
+  - [x] Configure Isolated Test Environment (Jest setup)
+  - [x] Implement Core API Structure (Routes, Controllers, Zod Validation)
   - [ ] Implement User Authentication (JWT)
   - [ ] Build Core CRUD APIs
 

@@ -1,0 +1,8 @@
+[2025-08-19 T12:30:00Z] - Debug log initiated. Capturing detailed operational insights.
+[2025-08-19 T12:45:00Z] - Attempted `prisma migrate dev --name init --schema=./backend/prisma/schema.prisma`.
+  - Initial failure: `DATABASE_URL` not found. Resolved by installing `dotenv-cli` and adding `prisma` script to `package.json`.
+  - Subsequent attempt with `npm run prisma --prefix ./backend migrate dev ...` resulted in `P1000: Authentication failed` (expected, as DB was not running).
+  - Started PostgreSQL via `docker compose up -d db`.
+  - Retried `prisma migrate dev`. Command appeared to hang/get stuck, likely due to interactive prompts in a non-interactive environment.
+  - Attempted `prisma migrate dev --create-only`. This also appeared to hang/get stuck, suggesting it might still have interactive elements or a long execution time that is being misinterpreted as a hang.
+  - **Problem:** `prisma migrate dev` (even with `--create-only`) is not suitable for this non-interactive CLI environment. Need to investigate truly non-interactive migration methods or alternative schema application (e.g., `db push` for development).
