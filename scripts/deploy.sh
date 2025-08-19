@@ -16,6 +16,12 @@ docker compose build
 echo "2. Bringing up Docker Containers..."
 docker compose up -d
 
+echo "3. Running Prisma Migrations..."
+docker compose exec backend npx prisma migrate deploy
+
+echo "4. Running Backend Tests..."
+docker compose exec backend npm test
+
 echo ""
 echo "--- ✅ Deployment Complete! ---"
 echo "PodTracker services are now running in the background."

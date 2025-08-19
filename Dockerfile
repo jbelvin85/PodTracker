@@ -1,22 +1,23 @@
-# Use a lightweight Node.js image, consistent with our stack
-FROM node:18-alpine
-
-# Set the working directory inside the container
+# Stage 1: Builder
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to leverage Docker cache
-# This ensures that 'npm install' is only re-run when dependencies change.
-COPY package.json ./
-COPY package-lock.json ./
-
-# Install dependencies
+COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application source code
 COPY . .
+RUN npm run build
+CMD ["tail", "-f", "/dev/null"]
 
-# Expose the port the app runs on
+# Stage 2: Production
+FROM node:18-alpine
+WORKDIR /app
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/backend/prisma ./backend/prisma
+COPY --from=builder /app/auth.schema.ts ./auth.schema.ts
+COPY --from=builder /app/package.json ./package.json
+
 EXPOSE 3001
-
-# The command to start the development server, which will watch for changes
-CMD ["npm", "run", "dev"]
+CMD ["node", "dist/index.js"]

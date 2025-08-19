@@ -27,109 +27,71 @@ chmod +x ./scripts/*.sh
 echo "   - Permissions set for .sh files in scripts/."
 
 
-# --- 3. Define Default Environment Variables ---
-# These will be written to the root .env file and used by docker-compose
-# and to generate other .env files.
-export POSTGRES_DB=${POSTGRES_DB:-podtracker}
-export DB_PORT=${DB_PORT:-5432}
-export TEST_DB_PORT=${TEST_DB_PORT:-5433}
-export BACKEND_PORT=${BACKEND_PORT:-3001}
-export FRONTEND_PORT=${FRONTEND_PORT:-5173}
+# --- 3. Set up .env file ---
+echo "3. Setting up .env file..."
+if [ ! -f "./.env" ]; then
+  if [ -f "./.env.example" ]; then
+    cp ./.env.example ./.env
+    echo "   - Created ./.env from ./.env.example."
+    echo "   - Please review and edit the ./.env file with your specific configurations."
+  else
+    echo "Error: ./.env.example not found. Cannot create ./.env." >&2
+    exit 1
+  fi
+else
+  echo "   - ./.env already exists. Skipping creation."
+  echo "   - Please ensure your ./.env file contains all necessary variables from ./.env.example."
+fi
+
+# --- 4. Configure Environment Variables in .env ---
+echo "4. Configuring environment variables in ./.env..."
+
+# Function to update a variable in .env
+update_env_var() {
+  local var_name=$1
+  local new_value=$2
+  if grep -q "^${var_name}=" ./.env; then
+    # Variable exists, update it
+    sed -i "/^${var_name}=/c\\${var_name}=${new_value}" ./.env
+  else
+    # Variable does not exist, append it
+    echo "${var_name}=${new_value}" >> ./.env
+  fi
+}
 
 # Prompt for PostgreSQL User
-if [ -z "$POSTGRES_USER" ]; then
+if [ -z "$(grep '^POSTGRES_USER=' ./.env | cut -d'=' -f2)" ] || [ "$(grep '^POSTGRES_USER=' ./.env | cut -d'=' -f2)" == "postgres" ]; then
   read -p "Enter PostgreSQL username (default: postgres): " input_user
-  export POSTGRES_USER=${input_user:-postgres}
+  POSTGRES_USER_VAL=${input_user:-postgres}
+  update_env_var "POSTGRES_USER" "${POSTGRES_USER_VAL}"
 fi
 
 # Prompt for PostgreSQL Password
-if [ -z "$POSTGRES_PASSWORD" ]; then
+if [ -z "$(grep '^POSTGRES_PASSWORD=' ./.env | cut -d'=' -f2)" ] || [ "$(grep '^POSTGRES_PASSWORD=' ./.env | cut -d'=' -f2)" == "password" ]; then
   read -s -p "Enter PostgreSQL password (default: postgres): " input_password
-  export POSTGRES_PASSWORD=${input_password:-postgres}
+  POSTGRES_PASSWORD_VAL=${input_password:-postgres}
+  update_env_var "POSTGRES_PASSWORD" "${POSTGRES_PASSWORD_VAL}"
   echo # Add a newline after the silent password input
 fi
 
 # Generate or prompt for JWT_SECRET
-if [ -z "$JWT_SECRET" ]; then
+if [ -z "$(grep '^JWT_SECRET=' ./.env | cut -d'=' -f2)" ] || [ "$(grep '^JWT_SECRET=' ./.env | cut -d'=' -f2)" == "your_super_secret_jwt_key_here" ]; then
   read -p "Generate a random JWT_SECRET? (y/N): " generate_jwt
   if [[ "$generate_jwt" =~ ^[yY]$ ]]; then
-    export JWT_SECRET=$(openssl rand -base64 32)
-    echo "Generated JWT_SECRET: ${JWT_SECRET}"
+    JWT_SECRET_VAL=$(openssl rand -base64 32)
+    echo "Generated JWT_SECRET: ${JWT_SECRET_VAL}"
   else
     read -p "Enter JWT_SECRET: " input_jwt_secret
-    export JWT_SECRET=${input_jwt_secret}
+    JWT_SECRET_VAL=${input_jwt_secret}
   fi
+  update_env_var "JWT_SECRET" "${JWT_SECRET_VAL}"
 fi
 
-# Generate or prompt for TEST_JWT_SECRET
-if [ -z "$TEST_JWT_SECRET" ]; then
-  read -p "Generate a random TEST_JWT_SECRET? (y/N): " generate_test_jwt
-  if [[ "$generate_test_jwt" =~ ^[yY]$ ]]; then
-    export TEST_JWT_SECRET=$(openssl rand -base64 32)
-    echo "Generated TEST_JWT_SECRET: ${TEST_JWT_SECRET}"
-  else
-    read -p "Enter TEST_JWT_SECRET: " input_test_jwt_secret
-    export TEST_JWT_SECRET=${input_test_jwt_secret}
-  fi
-fi
-
-# --- 4. Create root .env file for Docker Compose ---
-echo "3. Setting up root .env file for Docker Compose..."
-if [ ! -f "./.env" ]; then
-  cat > ./.env <<EOF
-# --- Docker Compose Environment Variables ---
-
-# PostgreSQL - Main Database
-POSTGRES_USER=${POSTGRES_USER}
-POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-POSTGRES_DB=${POSTGRES_DB}
-
-# Port Mappings
-DB_PORT=${DB_PORT}
-TEST_DB_PORT=${TEST_DB_PORT}
-BACKEND_PORT=${BACKEND_PORT}
-FRONTEND_PORT=${FRONTEND_PORT}
-EOF
-  echo "   - Created ./.env file."
-else
-  echo "   - ./.env already exists. Skipping."
-fi
-
-# --- 5. Create application-specific .env files ---
-echo "4. Setting up application-specific environment files..."
-if [ ! -f "./backend/.env" ]; then
-  # Note: Inside Docker, the backend connects to the 'db' service on the default postgres port 5432.
-  cat > ./backend/.env <<EOF
-# PostgreSQL Database Connection (for backend service)
-DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}"
-
-# JWT Secret for signing authentication tokens
-JWT_SECRET="${JWT_SECRET}"
-EOF
-  echo "   - Created ./backend/.env"
-else
-  echo "   - ./backend/.env already exists. Skipping."
-fi
-
-if [ ! -f "./.env.test" ]; then
-  # Note: For local testing, we connect to the port exposed on the host.
-  cat > ./.env.test <<EOF
-# PostgreSQL Database Connection (for local testing)
-DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${TEST_DB_PORT}/podtracker_test"
-
-# JWT Secret for signing authentication tokens in tests
-JWT_SECRET="${TEST_JWT_SECRET}"
-EOF
-  echo "   - Created ./.env.test"
-else
-  echo "   - ./.env.test already exists. Skipping."
-fi
-
-# --- 6. Install Node.js Dependencies ---
+# --- 5. Install Node.js Dependencies ---
 echo "5. Installing Node.js dependencies..."
 npm install
 
-# --- 7. Generate Prisma Client and Apply Migrations ---
+# --- 6. Generate Prisma Client and Apply Migrations ---
 echo "6. Generating Prisma Client and Applying Migrations..."
 # For development, `prisma db push` is faster and creates the schema directly.
 # For production, `prisma migrate deploy` is used to apply pending migrations.
@@ -148,5 +110,5 @@ if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
   powershell.exe -File ".\scripts\deploy.ps1"
 else
   echo "Next step: Starting application deployment (Linux/macOS)..."
-  ./scripts/deploy.sh
+  ./scripts\deploy.sh
 fi

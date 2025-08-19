@@ -1,7 +1,7 @@
 # PodTracker Project Goals
 
 ## Current Task
-- **Git Workflow:** Created a new `develop` branch to facilitate ongoing development and feature integration.
+- **Phase 1: Backend & Database Foundation (In Progress - Refining Docker Environment & Testing)**
 
 This document outlines the development goals for recreating and expanding upon the original PodTracker application. Our objective is to build a modern, robust, and scalable PWA using the technology stack defined in `docs/SUMMARY.md`.
 
@@ -21,20 +21,20 @@ We will approach development in distinct phases to ensure a structured and manag
 
 The goal of this phase is to build the core data structures, API endpoints, and containerized development environment that will power the application.
 - **[x] Database Schema:** Define the complete Prisma schema for all core models. (Initial `User`, `Deck`, and `Pod` models complete).
-- **[ ] Docker Environment:** Containerize the backend and database for consistent local development.
-  - **[ ]** Create Dockerfile for backend service (Node.js + dependencies).
-  - **[ ]** Define docker-compose.yml with services for backend and postgres.
-  - **[ ]** Configure persistent database volumes for Postgres.
-  - **[ ]** Add environment variable handling (.env.docker).
+- **[x] Docker Environment:** Containerize the backend and database for consistent local development.
+  - **[x]** Create Dockerfile for backend service (Node.js + dependencies).
+  - **[x]** Define docker-compose.yml with services for backend and postgres.
+  - **[x]** Configure persistent database volumes for Postgres.
+  - **[x]** Add unified environment variable handling (.env.example and setup.sh).
   - **[ ]** Create helper scripts (docker-up.sh, docker-down.sh, docker-rebuild.sh) for common workflows.
-  - **[ ]** Verify Prisma migrations and testing run successfully inside containers.
+  - **[x]** Verify Prisma migrations and testing run successfully inside containers.
 
-- **[ ] User Authentication:** Implement secure user registration and login endpoints using JWT.
+- **[x] User Authentication:** Implement secure user registration and login endpoints using JWT.
   - **[x]** Implement registration/login controller logic.
   - **[x]** Add Zod validation for auth endpoints.
   - **[x]** Add JWT-based route protection middleware.
-- **[ ] Core CRUD APIs:** Create and test the API endpoints for managing Users, Decks, and Pods.
-- **[x] Testing Environment:** Establish a robust testing setup for the backend using Jest and Supertest. (Test database infrastructure configured. **Note: Test execution is currently blocked by pending Docker installation.**).
+- **[x] Core CRUD APIs:** Create and test the API endpoints for managing Users, Decks, and Pods.
+- **[x] Testing Environment:** Establish a robust testing setup for the backend using Jest and Supertest, including a containerized test runner and dedicated test database.
 
 ### Phase 2: Core Frontend Implementation
 

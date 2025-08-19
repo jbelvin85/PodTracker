@@ -34,6 +34,28 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d podtracker_test"]
 
+  # Backend Test Runner Service
+  test-runner:
+    container_name: podtracker-test-runner
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.test
+    depends_on:
+      test-db:
+        condition: service_healthy
+    environment:
+      # Ensure the test runner connects to the test database
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@test-db:5432/podtracker_test
+      # Use the same JWT secret as the backend for consistency in tests
+      JWT_SECRET: ${JWT_SECRET}
+    volumes:
+      # Mount the backend source code for live changes and test execution
+      - ./backend:/app
+      # Exclude node_modules from the host mount to use container's node_modules
+      - /app/node_modules
+    # Command to run tests. This can be overridden when running `docker-compose run test-runner <command>`
+    command: ["npm", "test"]
+
   # Backend API Service (Node.js)
   backend:
     container_name: podtracker-backend

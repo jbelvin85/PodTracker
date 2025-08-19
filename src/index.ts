@@ -9,6 +9,9 @@ app.use(express.json());
 
 // Use the authentication routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/decks', deckRoutes);
+app.use('/api/pods', podRoutes);
 
 // Start the server
 app.listen(port, () => {

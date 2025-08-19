@@ -17,7 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Git Workflow:** Created a new `develop` branch to facilitate ongoing development and feature integration.
 
 ### Changed
+- **Tooling(deploy):** Enhanced `deploy.sh` to automatically run Prisma migrations and backend tests inside the Docker containers.
 - **Documentation:** Added a new section to `docs/LEARNING_JOURNAL.md` explaining environment variables and how to resolve the `TEST_DATABASE_URL` warning.
+
+### Added
+- **Backend:** Implemented CRUD APIs for the Deck model.
+- **Backend:** Implemented CRUD APIs for the Pod model.
 
 ## [0.1.6] - 2025-08-17
 ### Added
