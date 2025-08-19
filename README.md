@@ -8,30 +8,9 @@ A modern, containerized PWA for tracking Magic: The Gathering Commander games, d
 
 **Current Phase:** `Phase 1: Backend & Database Foundation`
 
-The project is currently focused on building the core API, database schema, and user authentication systems. The foundational Docker environment and testing infrastructure are in place, but full test execution is pending the completion of Docker installation.
+This project is a complete, ground-up rebuild of the original PodTracker application. The development process is being chronicled in our living textbook, The Primer, which serves as the architectural guide. We are currently focused on building the core API, database schema, and containerized environment.
 
 ---
-
-## ✨ Features
-
-The goal of PodTracker is to provide a complete toolkit for Commander players:
-
-- **Pod Management:** Create and manage your playgroups ("Pods").
-- **Deck Lists:** Keep a list of your decks, including commander data and links to external deckbuilding sites.
-- **Game Tracking:** Set up and track games, including registered and guest users (the players), turn order, life totals, commander damage, poison counters, energy counters, start time, end time and timestamped logs of all game actions (adding or removing counters, passing turns, players leaving the game, adding notes, and game resoltuion ie how the game was won) for more in-depth game review.
-- **Match History:** Record and review your entire game history with a turn-by-turn event log.
-- **Player Statistics:** Analyze your performance, deck win-rates, and more.
-- **Chat:** Pod-based group chat and direct messaging between users.
-## 🛠️ Tech Stack
-
-| Role          | Technology                                       |
-|---------------|--------------------------------------------------|
-| **Frontend**  | React, Vite, SWR, Tailwind CSS                   |
-| **Backend**   | Node.js, Express, TypeScript, Zod                |
-| **Database**  | PostgreSQL, Prisma ORM                           |
-| **Auth**      | JSON Web Tokens (JWT)                            |
-| **Testing**   | Jest, Supertest                                  |
-| **Infra**     | Docker, Docker Compose, Nginx (as reverse proxy) |
 
 ## 🚀 Getting Started
 
@@ -39,13 +18,18 @@ This project is fully containerized using Docker. Ensure you have **Docker Deskt
 
 ### 1. First-Time Setup (Run Once)
 
-Clone the repository and run the setup script. This will check for prerequisites, install all Node.js dependencies, and create the necessary `.env` configuration files.
+Clone the repository and run the setup script for your OS. This will check for prerequisites and generate a `.env` file with your local configuration.
 
 ```bash
 git clone <your-repo-url>
 cd podtracker
+
+# For Linux/macOS/WSL
 chmod +x ./scripts/*.sh
 ./scripts/setup.sh
+
+# For Windows PowerShell
+./scripts/setup.ps1
 ```
 
 ### 2. Running the Application Locally
