@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
 
 export const getHealth = (req: Request, res: Response) => {
-  res.status(200).json({ status: 'UP' });
+  res.status(200).json({ message: 'Backend is healthy!' });
 };

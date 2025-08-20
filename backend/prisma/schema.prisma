@@ -11,33 +11,21 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  password  String   // In a real app, this would be hashed
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  decks     Deck[]
-  pods      Pod[]    @relation("PodToUser")
+  email     String   @unique
+  username  String   @unique
+  password  String
+  pods      Pod[]
 }
 
 model Pod {
-  id        Int      @id @default(autoincrement())
-  name      String
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  members   User[]   @relation("PodToUser")
-}
-
-model Deck {
-  id          Int      @id @default(autoincrement())
-  name        String
-  commander   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  ownerId     Int
-  owner       User     @relation(fields: [ownerId], references: [id])
+  name      String   @unique
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id])
+  members   User[]   @relation(name: "PodMembers")
 }

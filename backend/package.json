@@ -1,33 +1,15 @@
 {
-  "name": "podtracker-backend",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "Backend API for PodTracker",
-  "main": "dist/index.js",
+  "description": "PodTracker Backend",
+  "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "test": "jest",
-    "prisma": "dotenv -e ./.env -- npx prisma"
+    "test": "jest"
   },
   "keywords": [],
-  "author": "The Wizard",
-  "license": "ISC",
-  "dependencies": {
-    "@prisma/client": "^6.14.0",
-    "express": "^5.1.0",
-    "zod": "^4.0.17"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^24.3.0",
-    "@types/supertest": "^6.0.3",
-    "dotenv-cli": "^10.0.0",
-    "jest": "^30.0.5",
-    "prisma": "^6.14.0",
-    "supertest": "^7.1.4",
-    "ts-jest": "^29.4.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
-  }
+  "author": "",
+  "license": "ISC"
 }

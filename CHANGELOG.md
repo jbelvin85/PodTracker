@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Documentation:** Completed initial draft of THE_PRIMER.md, covering full application build process.
 - **Documentation:** Accepted ADR-0001, choosing **Docusaurus** as the Static Site Generator for project documentation.
 - **Backend Foundation:**
   - Initialized Node.js/Express backend with TypeScript.
