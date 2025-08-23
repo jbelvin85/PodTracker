@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:14-alpine
@@ -8,22 +6,27 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: podtracker_db
-    
     volumes:
       - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d podtracker_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    
+    ports:
+      - "8001:3000"
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/podtracker_db?schema=public
       JWT_SECRET: your_jwt_secret_key_for_docker # Use a strong, unique key
       NODE_ENV: production
     depends_on:
-      - db
-    
+      db:
+        condition: service_healthy
 
   frontend:
     build:
@@ -34,6 +37,7 @@ services:
     depends_on:
       - backend
     volumes:
+      - ./frontend:/app
       - /app/node_modules # Exclude node_modules from host mount
 
   nginx:

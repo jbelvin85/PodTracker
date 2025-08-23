@@ -12,11 +12,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - User authentication (registration, login, JWT-based).
   - Pod management (CRUD operations).
   - Game management (CRUD operations).
-- **Infrastructure:**
-  - Updated Docker Compose configurations for robust multi-service deployment.
-  - Ensured backend and frontend services run reliably within Docker.
+- **Frontend:** Implemented user authentication (login, registration) with JWT.
+- **Frontend:** Integrated `AuthContext` and `useAuth` hook for authentication state management.
+- **Frontend:** Implemented protected routes using `react-router-dom`.
+- **Frontend:** Displayed authenticated user data on the homepage.
+- **Frontend:** Implemented Pod Management (list, create, update, delete) with SWR.
+- **Frontend:** Implemented Deck Management (list, create, update, delete) with SWR.
+- **Frontend:** Implemented Game Tracking (list, create, update, delete) with SWR.
+- **Deployment:** Configured Docker Compose for local full-stack application deployment (backend, frontend, database, Nginx).
+- **Scripts:** Added `setup.bat` for initial project setup and `deploy.bat` for Docker Compose management.
+- **Deployment:** Configured Docker Compose for local full-stack application deployment (backend, frontend, database, Nginx).
+- **Frontend:** Implemented user authentication (login, registration) with JWT.
+- **Frontend:** Integrated `AuthContext` and `useAuth` hook for authentication state management.
+- **Frontend:** Implemented protected routes using `react-router-dom`.
+- **Frontend:** Displayed authenticated user data on the homepage.
+- **Backend:** Implemented CRUD API endpoints for the `Game` model.
+- **Testing:** Added integration tests for the Game model (CRUD operations).
+- **Backend:** Implemented centralized error handling with custom error classes (`ApiError`, `NotFoundError`, `BadRequestError`, `UnauthorizedError`, `ForbiddenError`).
+- **Backend:** Refactored controllers to use new error handling middleware.
+- **Testing:** Added integration tests for various error scenarios (validation, not found, unauthorized).
 - **Testing:**
   - Implemented basic backend database integration tests using Jest and Prisma.
+  - Added `start_and_monitor_tests.sh` script for automated test execution, including Docker Compose setup and teardown.
+  - Documented `test:e2e` npm script in `THE_PRIMER.md`.
+  - Added integration tests for the Pod model (CRUD operations).
+  - Added integration tests for the Deck model (CRUD operations).
 - **Documentation:** Completed initial draft of THE_PRIMER.md, covering full application build process.
 - **Documentation:** Accepted ADR-0001, choosing **Docusaurus** as the Static Site Generator for project documentation.
 - **Backend Foundation:**

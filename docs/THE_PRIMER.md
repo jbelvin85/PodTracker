@@ -116,6 +116,37 @@ You should see output indicating that your `podtracker-db` (and potentially othe
 
 ### 2.4. Backend Environment Configuration: Attuning Your Spells
 
+### 2.5. Automated Setup and Deployment (Windows): Casting the Rituals
+
+To streamline the setup and deployment process on Windows, we've provided two batch scripts:
+
+*   **`setup.bat`:** This script will guide you through the initial setup of the project. It will:
+    *   Create `.env` files in the `backend/` and `frontend/` directories (if they don't already exist) by copying from their respective `.env.example` files.
+    *   Install all necessary npm dependencies for both the backend and frontend.
+    *   Run Prisma migrations and generate the Prisma client for the backend database.
+
+    To run the setup, open your terminal or command prompt, navigate to the project root (`D:\GitHub\podtracker`), and execute:
+    ```bash
+    .\gemini\scripts\setup.bat
+    ```
+
+*   **`deploy.bat`:** This script will handle the Docker Compose operations for running your application. It will:
+    *   Stop any currently running Docker Compose services (`docker-compose down`).
+    *   Build fresh Docker images for your backend and frontend services, and then start all services in detached mode (`docker-compose up --build -d`).
+    *   Inform you of the URL to access the running application.
+
+    To deploy the application, open your terminal or command prompt, navigate to the project root (`D:\GitHub\podtracker`), and execute:
+    ```bash
+    .\gemini\scripts\deploy.bat
+    ```
+
+    Once deployed, you can access the full PodTracker application in your web browser at: `http://localhost:8000`.
+
+    To stop all running Docker Compose services, simply run:
+    ```bash
+    docker-compose down
+    ```
+
 The backend requires certain environment variables to connect to the database and function correctly. We use a `.env` file for this. Navigate into the `backend` directory:
 
 ```bash
@@ -332,6 +363,10 @@ Now, if your backend server is running (you can start it by navigating to `backe
 
 Let's create endpoints to register new users and retrieve all existing users. This will involve creating a Zod schema for validation.
 
+#### Game Endpoints (CRUD Operations)
+
+We have also implemented basic CRUD (Create, Read, Update, Delete) API endpoints for the `Game` model, allowing for management of game sessions.
+
 1.  **`src/schemas/userSchema.ts`:** (Create this new file)
 
     ```typescript
@@ -463,6 +498,17 @@ With these additions, you now have a basic health check and user management endp
 *   **GET `http://localhost:3000/api/users`**
 
 ### 3.5. Authentication (JWT): Warding Your Domain
+
+### 3.6. Centralized Error Handling: Shielding Your Domain
+
+Just as a Planeswalker must protect their domain from unforeseen threats, robust error handling is crucial for a stable and user-friendly application. We've implemented a centralized error handling mechanism to catch and process errors consistently across our API. This involves:
+
+*   **Custom Error Classes:** Defining specific error types (e.g., `NotFoundError`, `BadRequestError`, `UnauthorizedError`) to provide clear and actionable feedback.
+*   **Global Error Middleware:** A single middleware function in `src/index.ts` that intercepts all errors, formats them into a consistent JSON response, and sends appropriate HTTP status codes.
+*   **Refactored Controllers:** Our controllers now throw these custom errors or pass them to the `next()` middleware, keeping their logic clean and focused on business rules.
+*   **Zod Integration:** Zod validation errors are now caught by our centralized error handler, providing detailed messages for invalid input.
+
+This approach ensures that our API responses are predictable, making it easier for the frontend to handle errors gracefully and provide a better user experience.
 
 Just as a Planeswalker wards their domain against intruders, we need to secure our API endpoints. JSON Web Tokens (JWTs) provide a secure way to transmit information between parties as a compact, URL-safe JSON object. We'll implement a login mechanism that issues a JWT upon successful authentication, and then use this token to protect our routes.
 
@@ -745,6 +791,110 @@ Now, when you view your frontend in the browser, you should see the new header s
 
 ### 4.3. State Management: Controlling the Flow of Battle
 
+### 4.4. Authentication and State Management: Warding the Frontend
+
+Just as the backend secures its API, the frontend needs to manage user authentication and maintain a global state for login status. We've implemented a robust authentication system using React Context and a custom hook.
+
+#### `useAuth` Hook and `AuthProvider`
+
+Our `useAuth` hook (`frontend/src/hooks/useAuth.ts`) provides functions for user registration, login, and logout, and manages the authentication state (`isLoggedIn`, `error`). The `AuthProvider` component wraps our application, making the authentication state and functions available to any component that uses the `useAuth` hook.
+
+```typescript
+// frontend/src/hooks/useAuth.ts (simplified)
+import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+interface AuthContextType {
+  isLoggedIn: boolean;
+  error: string | null;
+  register: (data: any) => Promise<void>;
+  login: (data: any) => Promise<void>;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  // ... authentication logic (register, login, logout, state management)
+  const value = { isLoggedIn, error, register, login, logout };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+```
+
+#### Login and Registration Pages
+
+We've created dedicated pages for user authentication:
+
+*   **`frontend/src/pages/LoginPage.tsx`:** Allows users to log in with their credentials. It uses the `login` function from `useAuth` and displays any authentication errors.
+*   **`frontend/src/pages/RegisterPage.tsx`:** Enables new users to create an account. It utilizes the `register` function from `useAuth`.
+
+Both pages include basic forms styled with Tailwind CSS and links for navigation between them.
+
+#### Protected Routes
+
+To ensure only authenticated users can access certain parts of the application, we've implemented a `ProtectedRoute` component. This component checks the `isLoggedIn` status from `useAuth` and redirects unauthenticated users to the login page.
+
+```typescript jsx
+// frontend/src/App.tsx (simplified)
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const { isLoggedIn } = useAuth();
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+// ... inside App component Routes
+<Route
+  path="/"
+  element={
+    <ProtectedRoute>
+      <HomePage />
+    </ProtectedRoute>
+  }
+/>
+```
+
+#### Displaying Authenticated User Data
+
+On the `HomePage.tsx`, we now demonstrate how to fetch and display data for the authenticated user. This involves using SWR with an authenticated fetcher that includes the JWT token from `localStorage`.
+
+```typescript jsx
+// frontend/src/pages/HomePage.tsx (simplified)
+import useSWR from 'swr';
+import { useAuth } from '../hooks/useAuth';
+
+const HomePage = () => {
+  const { isLoggedIn } = useAuth();
+
+  const fetcher = async (url: string) => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) { throw new Error('Failed to fetch user data'); }
+    return res.json();
+  };
+
+  const { data: user, error, isLoading } = useSWR(isLoggedIn ? '/api/users/current' : null, fetcher);
+
+  // ... render user data
+};
+```
+
+This setup provides a solid foundation for managing user sessions and securing frontend routes.
+
 In React, managing the "state" of your application is crucial, much like a Planeswalker managing their hand and mana pool. State refers to data that changes over time and affects what is rendered on the screen. React provides hooks like `useState` and `useEffect` to manage component-level state and side effects.
 
 Let's create a simple counter component to illustrate `useState`:
@@ -815,7 +965,7 @@ Let's create a simple counter component to illustrate `useState`:
 
 This example demonstrates how `useState` declares a state variable (`count`) and a function to update it (`setCount`). When `setCount` is called, React re-renders the component with the new state value.
 
-### 4.4. Data Fetching with SWR: Scrying for Information
+### 4.5. Data Fetching with SWR: Scrying for Information
 
 SWR (Stale-While-Revalidate) is a powerful React Hooks library for data fetching. It's like scrying for information – it immediately shows you stale (cached) data while revalidating (fetching fresh) data in the background. This provides a fast and responsive user experience.
 
@@ -904,7 +1054,7 @@ npm install swr
 
 This demonstrates how SWR simplifies data fetching and provides a great user experience by handling loading and error states, and automatically revalidating data.
 
-### 4.5. Styling with Tailwind CSS: Adorning Your Champions
+### 4.6. Styling with Tailwind CSS: Adorning Your Champions
 
 Tailwind CSS is a utility-first CSS framework that allows you to build custom designs directly in your HTML (or JSX in React) by composing small, single-purpose utility classes. It's like having a vast arsenal of magical adornments, each with a specific effect, that you can combine to create powerful visual enchantments.
 
@@ -977,7 +1127,7 @@ We've already set up Tailwind in Section 4.1. Let's enhance our `Header` compone
 
 This demonstrates how you can use Tailwind's utility classes directly and also encapsulate them within reusable React components for consistency and maintainability.
 
-### 4.6. Routing: Navigating the Planes
+### 4.7. Routing: Navigating the Planes
 
 In a multi-page application like PodTracker, we need a way to navigate between different views or "planes." React Router is the standard library for client-side routing in React applications. It allows us to map URLs to specific components, creating a seamless single-page application experience.
 
@@ -1101,7 +1251,7 @@ npm install react-router-dom
 
 Now, when you run your frontend, you can navigate between the different routes, and the corresponding components will be rendered. This sets the stage for building out the various views of our application.
 
-### 4.7. PWA Features: The Planeswalker's Spark
+### 4.8. PWA Features: The Planeswalker's Spark
 
 The Planeswalker's Spark grants extraordinary abilities, and similarly, PWA features elevate a regular web application to an app-like experience. The core components that enable these features are the Web App Manifest and Service Workers.
 
@@ -1353,7 +1503,7 @@ Integration tests verify that different modules or services work correctly toget
 
 #### Backend API Integration Test Example
 
-Let's test our user creation and retrieval endpoints.
+Let's test our user creation and retrieval endpoints. We have also added integration tests for the `Pod`, `Deck`, and `Game` models, ensuring their CRUD operations function correctly. Furthermore, we have implemented dedicated integration tests for various error scenarios, including invalid input (Zod validation errors), non-existent resources, and unauthorized access, to ensure our centralized error handling works as expected.
 
 1.  **Install Supertest:**
 
@@ -1447,6 +1597,16 @@ npm test
 ```
 
 Similar to the backend, this will execute your frontend tests. If you configured Jest for watch mode, it might stay open and re-run tests on file changes.
+
+#### Running E2E Tests
+
+From the project root directory, you can run the end-to-end tests using the following command:
+
+```bash
+npm run test:e2e
+```
+
+This script will automatically start the necessary Docker services (like the database), run the backend tests, and then shut down the Docker services. This ensures a clean and consistent testing environment.
 
 By regularly running your tests, you ensure the quality and stability of your application, much like a Planeswalker constantly refining their deck to withstand any opponent. This completes the Testing section of our primer.
 

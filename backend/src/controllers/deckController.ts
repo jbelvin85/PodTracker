@@ -1,11 +1,12 @@
-import { Response } from 'express';
+import { Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../middleware/auth';
 import { CreateDeckInput, UpdateDeckInput } from '../schemas/deckSchema';
+import { NotFoundError } from '../utils/ApiError';
 
 const prisma = new PrismaClient();
 
-export const createDeck = async (req: AuthRequest, res: Response) => {
+export const createDeck = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { name, commander, description } = req.body as CreateDeckInput;
     const userId = req.user!.id;
@@ -21,11 +22,11 @@ export const createDeck = async (req: AuthRequest, res: Response) => {
 
     res.status(201).json(deck);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const getDecks = async (req: AuthRequest, res: Response) => {
+export const getDecks = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.user!.id;
 
@@ -35,11 +36,11 @@ export const getDecks = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json(decks);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const getDeckById = async (req: AuthRequest, res: Response) => {
+export const getDeckById = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const userId = req.user!.id;
@@ -49,16 +50,16 @@ export const getDeckById = async (req: AuthRequest, res: Response) => {
     });
 
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return next(new NotFoundError('Deck not found'));
     }
 
     res.status(200).json(deck);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const updateDeck = async (req: AuthRequest, res: Response) => {
+export const updateDeck = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const userId = req.user!.id;
@@ -69,7 +70,7 @@ export const updateDeck = async (req: AuthRequest, res: Response) => {
     });
 
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return next(new NotFoundError('Deck not found'));
     }
 
     const updatedDeck = await prisma.deck.update({
@@ -83,11 +84,11 @@ export const updateDeck = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json(updatedDeck);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const deleteDeck = async (req: AuthRequest, res: Response) => {
+export const deleteDeck = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const userId = req.user!.id;
@@ -97,7 +98,7 @@ export const deleteDeck = async (req: AuthRequest, res: Response) => {
     });
 
     if (!deck) {
-      return res.status(404).json({ message: 'Deck not found' });
+      return next(new NotFoundError('Deck not found'));
     }
 
     await prisma.deck.delete({
@@ -106,6 +107,6 @@ export const deleteDeck = async (req: AuthRequest, res: Response) => {
 
     res.status(204).send();
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };

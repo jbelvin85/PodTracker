@@ -1,7 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export const useAuth = () => {
+interface AuthContextType {
+  isLoggedIn: boolean;
+  error: string | null;
+  register: (data: any) => Promise<void>;
+  login: (data: any) => Promise<void>;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -18,7 +28,7 @@ export const useAuth = () => {
   const register = async (data: any) => {
     setError(null);
     try {
-      const res = await fetch('/api/users/register', {
+      const res = await fetch('/api/users', { // Corrected endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +50,7 @@ export const useAuth = () => {
   const login = async (data: any) => {
     setError(null);
     try {
-      const res = await fetch('/api/users/login', {
+      const res = await fetch('/api/login', { // Corrected endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,5 +78,15 @@ export const useAuth = () => {
     navigate('/login');
   };
 
-  return { register, login, logout, error, isLoggedIn };
+  const value = { isLoggedIn, error, register, login, logout };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

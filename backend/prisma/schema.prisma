@@ -22,6 +22,8 @@ model User {
   ownedPods Pod[]    @relation("PodOwner")
   pods      Pod[]    @relation("PodMembers")
   decks     Deck[]
+  games     Game[]   @relation("GamePlayers")
+  wonGames  Game[]   @relation("GameWinner")
 }
 
 model Pod {
@@ -35,6 +37,7 @@ model Pod {
   owner     User     @relation("PodOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   members   User[]   @relation("PodMembers")
   decks     Deck[]   @relation("PodDecks")
+  games     Game[]
 }
 
 model Deck {
@@ -49,4 +52,19 @@ model Deck {
   ownerId     String
   owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   pods        Pod[]    @relation("PodDecks")
+}
+
+model Game {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  startTime DateTime
+  endTime   DateTime?
+
+  // Relations
+  podId     String
+  pod       Pod      @relation(fields: [podId], references: [id], onDelete: Cascade)
+  players   User[]   @relation("GamePlayers")
+  winnerId  String?
+  winner    User?    @relation("GameWinner", fields: [winnerId], references: [id])
 }

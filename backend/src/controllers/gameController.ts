@@ -1,149 +1,83 @@
-import { Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { AuthRequest } from '../middleware/auth';
 import { CreateGameInput, UpdateGameInput } from '../schemas/gameSchema';
+import { NotFoundError } from '../utils/ApiError';
 
 const prisma = new PrismaClient();
 
-export const createGame = async (req: AuthRequest, res: Response) => {
+export const createGame = async (req: Request<{}, {}, CreateGameInput>, res: Response, next: NextFunction) => {
   try {
-    const { podId, playerIds, startTime } = req.body as CreateGameInput;
-    const userId = req.user!.id;
-
-    // Verify that the user is a member of the pod
-    const pod = await prisma.pod.findFirst({
-      where: {
-        id: podId,
-        OR: [
-          { ownerId: userId },
-          { members: { some: { id: userId } } },
-        ],
-      },
-    });
-
-    if (!pod) {
-      return res.status(403).json({ message: 'User is not authorized to create a game in this pod' });
-    }
+    const { podId, playerIds, startTime } = req.body;
 
     const game = await prisma.game.create({
       data: {
-        podId,
+        pod: { connect: { id: podId } },
+        players: { connect: playerIds.map(id => ({ id })) },
         startTime: startTime ? new Date(startTime) : new Date(),
-        players: {
-          connect: playerIds.map((id) => ({ id })),
-        },
       },
     });
-
     res.status(201).json(game);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const getGames = async (req: AuthRequest, res: Response) => {
-  try {
-    const userId = req.user!.id;
-
-    const games = await prisma.game.findMany({
-      where: {
-        players: { some: { id: userId } },
-      },
-      include: {
-        pod: true,
-        players: true,
-      },
-    });
-
-    res.status(200).json(games);
-  } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
-  }
-};
-
-export const getGameById = async (req: AuthRequest, res: Response) => {
+export const getGameById = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    const userId = req.user!.id;
-
-    const game = await prisma.game.findFirst({
-      where: {
-        id,
-        players: { some: { id: userId } },
-      },
-      include: {
-        pod: true,
-        players: true,
-      },
+    const game = await prisma.game.findUnique({
+      where: { id },
+      include: { pod: true, players: true },
     });
 
     if (!game) {
-      return res.status(404).json({ message: 'Game not found or user not authorized' });
+      return next(new NotFoundError('Game not found'));
     }
-
     res.status(200).json(game);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const updateGame = async (req: AuthRequest, res: Response) => {
+export const updateGame = async (req: Request<{ id: string }, {}, UpdateGameInput>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    const userId = req.user!.id;
-    const { podId, playerIds, endTime, winnerId } = req.body as UpdateGameInput;
+    const { podId, playerIds, endTime, winnerId } = req.body;
 
-    const game = await prisma.game.findFirst({
-      where: {
-        id,
-        players: { some: { id: userId } },
-      },
-    });
-
-    if (!game) {
-      return res.status(404).json({ message: 'Game not found or user not authorized' });
-    }
-
-    const updatedGame = await prisma.game.update({
+    const game = await prisma.game.update({
       where: { id },
       data: {
-        podId,
+        pod: podId ? { connect: { id: podId } } : undefined,
+        players: playerIds ? { set: playerIds.map(playerId => ({ id: playerId })) } : undefined,
         endTime: endTime ? new Date(endTime) : undefined,
-        winnerId,
-        players: {
-          set: playerIds ? playerIds.map((id) => ({ id })) : undefined,
-        },
+        winner: winnerId ? { connect: { id: winnerId } } : undefined,
       },
     });
-
-    res.status(200).json(updatedGame);
+    res.status(200).json(game);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const deleteGame = async (req: AuthRequest, res: Response) => {
+export const deleteGame = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    const userId = req.user!.id;
-
-    const game = await prisma.game.findFirst({
-      where: {
-        id,
-        players: { some: { id: userId } },
-      },
-    });
-
-    if (!game) {
-      return res.status(404).json({ message: 'Game not found or user not authorized' });
-    }
-
     await prisma.game.delete({
       where: { id },
     });
-
     res.status(204).send();
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
+  }
+};
+
+export const getAllGames = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const games = await prisma.game.findMany({
+      include: { pod: true, players: true, winner: true },
+    });
+    res.status(200).json(games);
+  } catch (error: any) {
+    next(error);
   }
 };

@@ -1,11 +1,12 @@
-import { Response } from 'express';
+import { Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../middleware/auth';
 import { CreatePodInput, UpdatePodInput } from '../schemas/podSchema';
+import ApiError, { BadRequestError, NotFoundError } from '../utils/ApiError';
 
 const prisma = new PrismaClient();
 
-export const createPod = async (req: AuthRequest, res: Response) => {
+export const createPod = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { name, memberIds = [], deckIds = [] } = req.body as CreatePodInput;
     const userId = req.user!.id;
@@ -25,11 +26,14 @@ export const createPod = async (req: AuthRequest, res: Response) => {
 
     res.status(201).json(pod);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    if (error.code === 'P2002') {
+      return next(new BadRequestError('Pod with that name already exists'));
+    }
+    next(error);
   }
 };
 
-export const getPods = async (req: AuthRequest, res: Response) => {
+export const getPods = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const userId = req.user!.id;
 
@@ -49,11 +53,11 @@ export const getPods = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json(pods);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const getPodById = async (req: AuthRequest, res: Response) => {
+export const getPodById = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const userId = req.user!.id;
@@ -74,16 +78,16 @@ export const getPodById = async (req: AuthRequest, res: Response) => {
     });
 
     if (!pod) {
-      return res.status(404).json({ message: 'Pod not found' });
+      return next(new NotFoundError('Pod not found'));
     }
 
     res.status(200).json(pod);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const updatePod = async (req: AuthRequest, res: Response) => {
+export const updatePod = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const userId = req.user!.id;
@@ -94,7 +98,7 @@ export const updatePod = async (req: AuthRequest, res: Response) => {
     });
 
     if (!pod) {
-      return res.status(404).json({ message: 'Pod not found or you are not the owner' });
+      return next(new NotFoundError('Pod not found or you are not the owner'));
     }
 
     const updatedPod = await prisma.pod.update({
@@ -112,11 +116,11 @@ export const updatePod = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json(updatedPod);
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };
 
-export const deletePod = async (req: AuthRequest, res: Response) => {
+export const deletePod = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const userId = req.user!.id;
@@ -126,7 +130,7 @@ export const deletePod = async (req: AuthRequest, res: Response) => {
     });
 
     if (!pod) {
-      return res.status(404).json({ message: 'Pod not found or you are not the owner' });
+      return next(new NotFoundError('Pod not found or you are not the owner'));
     }
 
     await prisma.pod.delete({
@@ -135,6 +139,6 @@ export const deletePod = async (req: AuthRequest, res: Response) => {
 
     res.status(204).send();
   } catch (error: any) {
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 };

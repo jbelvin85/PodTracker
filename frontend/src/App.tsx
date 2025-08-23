@@ -1,27 +1,62 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import DecksPage from './pages/DecksPage';
 import PodsPage from './pages/PodsPage';
+import DecksPage from './pages/DecksPage';
+import { AuthProvider, useAuth } from './hooks/useAuth';
+
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const { isLoggedIn } = useAuth();
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
-        <Header />
-        <main className="container mx-auto p-4">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/games" element={<GamesPage />} />
-            <Route path="/pods" element={<PodsPage />} />
-          </Routes>
-        </main>
-      </div>
+      <AuthProvider>
+        <div className="min-h-screen bg-gray-100">
+          <Header />
+          <main className="container mx-auto p-4">
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              {/* Protected Routes */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/games"
+                element={
+                  <ProtectedRoute>
+                    <GamesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/pods"
+                element={
+                  <ProtectedRoute>
+                    <PodsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/decks"
+                element={
+                  <ProtectedRoute>
+                    <DecksPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </main>
+        </div>
+      </AuthProvider>
     </Router>
   );
 }

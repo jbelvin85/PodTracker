@@ -8,7 +8,8 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "test": "jest",
-    "test:integration": "jest --testPathPattern=integration"
+        "test:integration": "jest --testPathPattern=integration",
+    "test:e2e": "bash ../gemini/scripts/start_and_monitor_tests.sh"
   },
   "keywords": [],
   "author": "",
