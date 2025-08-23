@@ -6,9 +6,9 @@ A modern, containerized PWA for tracking Magic: The Gathering Commander games, d
 
 ## 📋 Project Status
 
-**Current Phase:** `Phase 1: Backend & Database Foundation`
+**Current Phase:** `MVP Implemented`
 
-This project is a complete, ground-up rebuild of the original PodTracker application. The development process is being chronicled in our living textbook, The Primer, which serves as the architectural guide. We have successfully established the core backend API structure, integrated Zod for validation, and set up the Prisma ORM with initial data models. We are currently working on resolving database migration issues.
+PodTracker now has a functional Minimum Viable Product (MVP) with user authentication, deck management, and pod management. The backend API is fully functional, and the frontend provides a basic UI for these features. The development process continues to be chronicled in our living textbook, The Primer, which serves as the architectural guide.
 
 ---
 
@@ -72,19 +72,19 @@ Make sure scripts are executable by running `chmod +x ./scripts/*.sh`.
 
 *For a more detailed breakdown of the tasks in each phase, see [docs/GOALS.md](./docs/GOALS.md).*
 
-- [x] **Phase 1: Backend & Database Foundation** *(In Progress)*
+- [x] **Phase 1: Backend & Database Foundation** *(Completed)*
   - [x] Establish Docker Environment & Services (PostgreSQL service configured)
   - [x] Define Initial Database Schema (`User`, `Deck`, `Pod`) (Prisma schema defined)
   - [x] Configure Isolated Test Environment (Jest setup)
   - [x] Implement Core API Structure (Routes, Controllers, Zod Validation)
-  - [ ] Implement User Authentication (JWT)
-  - [ ] Build Core CRUD APIs
+  - [x] Implement User Authentication (JWT)
+  - [x] Build Core CRUD APIs
 
-- [ ] **Phase 2: Core Frontend Implementation**
-  - [ ] Set up UI Framework, Routing, and Layout
-  - [ ] Build Frontend Authentication Flow
-  - [ ] Data Display: Build the primary views for displaying a user's decks and pods.
-  - [ ] Data Management: Implement forms and components for creating and editing decks and pods, connecting them to the backend API via SWR.
+- [x] **Phase 2: Core Frontend Implementation** *(Completed)*
+  - [x] Set up UI Framework, Routing, and Layout
+  - [x] Build Frontend Authentication Flow
+  - [x] Data Display: Build the primary views for displaying a user's decks and pods.
+  - [x] Data Management: Implement forms and components for creating and editing decks and pods, connecting them to the backend API via SWR.
 
 - [ ] **Phase 3: The Gameplay Loop**
   - [ ] Game Setup: Develop the UI and backend logic for creating a new game from a pod of players and their chosen decks.

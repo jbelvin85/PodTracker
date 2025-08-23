@@ -8,8 +8,7 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: podtracker_db
-    ports:
-      - "5432:5432"
+    
     volumes:
       - db-data:/var/lib/postgresql/data
 
@@ -17,17 +16,14 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/podtracker_db?schema=public
       JWT_SECRET: your_jwt_secret_key_for_docker # Use a strong, unique key
       NODE_ENV: production
     depends_on:
       - db
-    volumes:
-      - ./backend:/app
-      - /app/node_modules # Exclude node_modules from host mount
+    
 
   frontend:
     build:
@@ -38,7 +34,6 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend:/app
       - /app/node_modules # Exclude node_modules from host mount
 
   nginx:

@@ -24,7 +24,8 @@ This document outlines the development roadmap for the PodTracker application. T
   - [x] Set up Express server with TypeScript.
   - [x] Structure API with Routes and Controllers.
   - [x] Implement input validation with Zod.
-  - [ ] Implement JWT-based authentication middleware.
+  - [x] Implement JWT-based authentication middleware.
+  - [x] Implement core CRUD operations for Pods and Games.
 
 - [x] **Phase 4: The Database Layer (Chapter 3)**
   - [x] Define the complete `schema.prisma`.

@@ -16,16 +16,37 @@ model User {
   updatedAt DateTime @updatedAt
   email     String   @unique
   username  String   @unique
-  password  String
-  pods      Pod[]
+  password  String   // Hashed password
+
+  // Relations
+  ownedPods Pod[]    @relation("PodOwner")
+  pods      Pod[]    @relation("PodMembers")
+  decks     Deck[]
 }
 
 model Pod {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  name      String   @unique
+  name      String
+
+  // Relations
   ownerId   String
-  owner     User     @relation(fields: [ownerId], references: [id])
-  members   User[]   @relation(name: "PodMembers")
+  owner     User     @relation("PodOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members   User[]   @relation("PodMembers")
+  decks     Deck[]   @relation("PodDecks")
+}
+
+model Deck {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  commander   String
+  description String?
+
+  // Relations
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  pods        Pod[]    @relation("PodDecks")
 }
