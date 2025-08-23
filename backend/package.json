@@ -7,6 +7,7 @@
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
+    "postinstall": "prisma generate",
     "test": "jest",
         "test:integration": "jest --testPathPattern=integration",
     "test:e2e": "bash ../gemini/scripts/start_and_monitor_tests.sh"
