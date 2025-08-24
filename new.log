@@ -1,223 +1,172 @@
-PS D:\GitHub\podtracker> .\setup.bat
-[ARCHITECT] Initializing project setup...
-[ARCHITECT] Checking for .env files...
-[ARCHITECT] Environment files checked. Please review and configure them.
-[ARCHITECT] Installing root dependencies...
-
-up to date, audited 572 packages in 3s
-
-86 packages are looking for funding
-  run `npm fund` for details
-
-2 moderate severity vulnerabilities
-
-To address all issues (including breaking changes), run:
-  npm audit fix --force
-
-Run `npm audit` for details.
+PS D:\GitHub\podtracker> .\deploy.bat --build
+[ARCHITECT] Starting deployment sequence...
+[ARCHITECT] Installing dependencies for all services...
 [ARCHITECT] Installing backend dependencies...
 
-up to date, audited 572 packages in 3s
+up to date, audited 720 packages in 4s
 
-86 packages are looking for funding
+123 packages are looking for funding
   run `npm fund` for details
 
 found 0 vulnerabilities
-[ARCHITECT] Installing frontend dependencies...
-
-up to date, audited 572 packages in 2s
-
-86 packages are looking for funding
-  run `npm fund` for details
-
-2 moderate severity vulnerabilities
-
-To address all issues (including breaking changes), run:
-  npm audit fix --force
-
-Run `npm audit` for details.
-[ARCHITECT] Generating Prisma client...
-Environment variables loaded from .env
-Prisma schema loaded from prisma\schema.prisma
-
-✔ Generated Prisma Client (v5.22.0) to .\..\node_modules\@prisma\client in 96ms
-
-Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
-
-Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
-
-┌─────────────────────────────────────────────────────────┐
-│  Update available 5.22.0 -> 6.14.0                      │
-│                                                         │
-│  This is a major update - please follow the guide at    │
-│  https://pris.ly/d/major-version-upgrade                │
-│                                                         │
-│  Run the following to update                            │
-│    npm i --save-dev prisma@latest                       │
-│    npm i @prisma/client@latest                          │
-└─────────────────────────────────────────────────────────┘
-[ARCHITECT] Building Docker containers...
-time="2025-08-23T08:59:09-05:00" level=warning msg="D:\\GitHub\\podtracker\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
-#1 [internal] load local bake definitions
-#1 reading from stdin 971B done
-#1 DONE 0.0s
-
-#2 [backend internal] load build definition from Dockerfile
-#2 transferring dockerfile: 434B 0.0s done
-#2 DONE 0.1s
-
-#3 [frontend internal] load build definition from Dockerfile
-#3 transferring dockerfile: 155B 0.0s done
-#3 DONE 0.1s
-
-#4 [auth] library/node:pull token for registry-1.docker.io
-#4 DONE 0.0s
-
-#5 [frontend internal] load metadata for docker.io/library/node:20
-#5 DONE 0.7s
-
-#6 [backend internal] load metadata for docker.io/library/node:18-alpine
-#6 DONE 0.7s
-
-#7 [frontend internal] load .dockerignore
-#7 transferring context: 2B done
-#7 DONE 0.1s
-
-#8 [backend internal] load .dockerignore
-#8 transferring context: 2B 0.0s done
-#8 DONE 0.2s
-
-#9 [frontend internal] load build context
-#9 transferring context: 771B 0.0s done
-#9 DONE 0.1s
-
-#10 [frontend 1/5] FROM docker.io/library/node:20@sha256:572a90df10a58ebb7d3f223d661d964a6c2383a9c2b5763162b4f631c53dc56a
-#10 resolve docker.io/library/node:20@sha256:572a90df10a58ebb7d3f223d661d964a6c2383a9c2b5763162b4f631c53dc56a 0.2s done
-#10 DONE 0.2s
-
-#11 [frontend 2/5] WORKDIR /app
-#11 CACHED
-
-#12 [frontend 3/5] COPY package*.json ./
-#12 CACHED
-
-#13 [frontend 4/5] RUN npm install
-#13 CACHED
-
-#14 [frontend 5/5] COPY . .
-#14 CACHED
-
-#15 [backend internal] load build context
-#15 transferring context: 2.56kB 0.0s done
-#15 DONE 0.1s
-
-#16 [frontend] exporting to image
-#16 exporting layers done
-#16 exporting manifest sha256:5784df580f3093a49c37655f9ad53261bc20dfce108a9ecb0062ed3527f16bd1 0.0s done
-#16 exporting config sha256:40a8d2f7aedf28821d27075f01595724c0245a37f4a5eb4960e795eb2989386a 0.0s 
-done
-#16 exporting attestation manifest sha256:f3a1c17554f1b80af6e385c9c9bae76b7e27ce02734c8310b0d3dadf671f7103
-#16 ...
-
-#17 [backend builder 1/7] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
-#17 resolve docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e 0.2s done
-#17 DONE 0.2s
-
-#18 [backend builder 2/7] WORKDIR /app
-#18 CACHED
-
-#19 [backend builder 3/7] COPY package*.json ./
-#19 CACHED
-
-#20 [backend builder 4/7] RUN npm install
-#20 CACHED
-
-#21 [backend runner 6/7] COPY --from=builder /app/prisma ./prisma
-#21 CACHED
-
-#22 [backend builder 5/7] COPY . .
-#22 CACHED
-
-#23 [backend builder 7/7] RUN npm run build
-#23 CACHED
-
-#24 [backend runner 4/7] COPY --from=builder /app/node_modules ./node_modules
-#24 CACHED
-
-#25 [backend runner 5/7] COPY --from=builder /app/dist ./dist
-#25 CACHED
-
-#26 [backend builder 6/7] RUN npx prisma generate
-#26 CACHED
-
-#27 [backend runner 3/7] COPY --from=builder /app/package*.json ./
-#27 CACHED
-
-#28 [backend runner 7/7] COPY .env ./
-#28 CACHED
-
-#16 [frontend] exporting to image
-#16 exporting attestation manifest sha256:f3a1c17554f1b80af6e385c9c9bae76b7e27ce02734c8310b0d3dadf671f7103 0.2s done
-#16 exporting manifest list sha256:612821307f105fe11c7399a7400a11dad8ded27cc843455c61229ddebb2bf5a9 0.0s done
-#16 naming to docker.io/library/podtracker-frontend:latest 0.0s done
-#16 unpacking to docker.io/library/podtracker-frontend:latest
-#16 unpacking to docker.io/library/podtracker-frontend:latest 0.0s done
-#16 DONE 0.4s
-
-#29 [backend] exporting to image
-#29 exporting layers 0.0s done
-#29 exporting manifest sha256:946feb1884488b2eb59fbc6a93e7c94d33993bfc412f92170c34e8b6d30f0822 0.0s done
-done
-#29 exporting attestation manifest sha256:1383ea9dc2a1da75ef3216b24be28798f05fb65be1ae6b769d3ffae1c6642499 0.1s done
-#29 exporting manifest list sha256:887232f957659ff1ca155ae2c00f1100a2ef20d52864e55bba4258f15e61feb9 0.1s done
-#29 naming to docker.io/library/podtracker-backend:latest
-#29 naming to docker.io/library/podtracker-backend:latest 0.0s done
-#29 unpacking to docker.io/library/podtracker-backend:latest 0.0s done
-#29 DONE 0.4s
-
-#30 [frontend] resolving provenance for metadata file
-#30 DONE 0.0s
-
-#31 [backend] resolving provenance for metadata file
-#31 DONE 0.0s
-[+] Building 2/2
- ✔ podtracker-backend   Built                                                                0.0s 
- ✔ podtracker-frontend  Built                                                                0.0s 
-[ARCHITECT] Foundation is set. The project is ready for deployment.
-PS D:\GitHub\podtracker> .\deploy.bat
-[ARCHITECT] Starting deployment sequence...
 [ARCHITECT] Applying database migrations...
-time="2025-08-23T08:59:22-05:00" level=warning msg="D:\\GitHub\\podtracker\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
 [+] Creating 1/1
- ✔ Container podtracker-db-1  Running                                                        0.0s 
-prisma:warn Prisma failed to detect the libssl/openssl version to use, and may not work as expected. Defaulting to "openssl-1.1.x".
-Please manually install OpenSSL and try installing Prisma again.
-prisma:warn Prisma failed to detect the libssl/openssl version to use, and may not work as expected. Defaulting to "openssl-1.1.x".
-Please manually install OpenSSL and try installing Prisma again.
+ ✔ Container podtracker-db-1  Running                                                                                      0.0s 
+[ARCHITECT-MIGRATE] Waiting for database at db:5432...
+[ARCHITECT-MIGRATE] Database is up - executing command
 Environment variables loaded from .env
 Prisma schema loaded from prisma/schema.prisma
 Datasource "db": PostgreSQL database "podtracker_db", schema "public" at "db:5432"
 
-Error: Could not parse schema engine response: SyntaxError: Unexpected token E in JSON at position 0
+The database is already in sync with the Prisma schema.
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 111ms
+
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.5.2
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.5.2
 npm notice To update run: npm install -g npm@11.5.2
 npm notice
-
+[ARCHITECT-MIGRATE] Migration complete.
 [ARCHITECT] Bringing services online...
-time="2025-08-23T08:59:39-05:00" level=warning msg="D:\\GitHub\\podtracker\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
-[+] Running 4/4
- ✔ Container podtracker-db-1        Running                                                  0.0s 
- ✔ Container podtracker-backend-1   Started                                                  3.4s 
- ✔ Container podtracker-frontend-1  Started                                                  3.5s 
- ✔ Container podtracker-nginx-1     Running                                                  0.0s 
+#1 [internal] load local bake definitions
+#1 reading from stdin 971B done
+#1 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 155B done
+#2 DONE 0.0s
+
+#3 [backend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 696B done
+#3 DONE 0.0s
+
+#4 [auth] library/node:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#5 [backend internal] load metadata for docker.io/library/node:18-slim
+#5 DONE 0.5s
+
+#6 [frontend internal] load metadata for docker.io/library/node:20
+#6 DONE 0.6s
+
+#7 [backend internal] load .dockerignore
+#7 transferring context: 2B 0.0s done
+#7 DONE 0.0s
+
+#8 [backend internal] load build context
+#8 DONE 0.0s
+
+#9 [backend builder 1/7] FROM docker.io/library/node:18-slim@sha256:f9ab18e354e6855ae56ef2b290dd225c1e51a564f87584b9bd21dd651838830e
+#9 resolve docker.io/library/node:18-slim@sha256:f9ab18e354e6855ae56ef2b290dd225c1e51a564f87584b9bd21dd651838830e 0.0s done     
+#9 DONE 0.0s
+
+#10 [frontend internal] load .dockerignore
+#10 transferring context: 2B done
+#10 DONE 0.1s
+
+#11 [frontend internal] load build context
+#11 transferring context: 25.25kB 0.0s done
+#11 DONE 0.1s
+
+#12 [frontend 1/5] FROM docker.io/library/node:20@sha256:572a90df10a58ebb7d3f223d661d964a6c2383a9c2b5763162b4f631c53dc56a       
+#12 resolve docker.io/library/node:20@sha256:572a90df10a58ebb7d3f223d661d964a6c2383a9c2b5763162b4f631c53dc56a 0.1s done
+#12 DONE 0.1s
+
+#13 [frontend 3/5] COPY package*.json ./
+#13 CACHED
+
+#14 [frontend 2/5] WORKDIR /app
+#14 CACHED
+
+#15 [frontend 4/5] RUN npm install
+#15 CACHED
+
+#8 [backend internal] load build context
+#8 transferring context: 345.44kB 0.2s done
+#8 DONE 0.2s
+
+#16 [backend runner  8/10] COPY .env ./
+#16 CACHED
+
+#17 [backend runner  3/10] RUN apt-get update && apt-get install -y -q openssl netcat-traditional && rm -rf /var/lib/apt/lists/*#17 CACHED
+
+#18 [backend runner  7/10] COPY --from=builder /app/prisma ./prisma
+#18 CACHED
+
+#19 [backend runner  9/10] COPY migrate.sh ./migrate.sh
+#19 CACHED
+
+#20 [backend builder 4/7] COPY prisma ./prisma
+#20 CACHED
+
+#21 [backend builder 5/7] RUN npm install
+#21 CACHED
+
+#22 [backend runner  5/10] COPY --from=builder /app/node_modules ./node_modules
+#22 CACHED
+
+#23 [backend builder 2/7] WORKDIR /app
+#23 CACHED
+
+#24 [backend builder 7/7] RUN npm run build
+#24 CACHED
+
+#25 [backend runner  4/10] COPY --from=builder /app/package*.json ./
+#25 CACHED
+
+#26 [backend builder 3/7] COPY package*.json ./
+#26 CACHED
+
+#27 [backend builder 6/7] COPY . .
+#27 CACHED
+
+#28 [backend runner  6/10] COPY --from=builder /app/dist ./dist
+#28 CACHED
+
+#29 [backend runner 10/10] RUN chmod +x ./migrate.sh
+#29 CACHED
+
+#30 [frontend 5/5] COPY . .
+#30 DONE 0.2s
+
+#31 [backend] exporting to image
+#31 exporting layers 0.0s done
+#31 exporting manifest sha256:ec52b12e7500470a772b4f0c9b2d4c9e064eac9155bb1d6b9ad99ffef5b53073 done
+#31 exporting config sha256:d0ab1bf9efbb688c13f3cd4e50b12fc2ad7162966178e2ff93bf03d12fb87966 done
+#31 exporting attestation manifest sha256:332e8db3fc3a7688cf68109db5167af76b21e5f2bb119a28250d058060356cab 0.1s done
+#31 exporting manifest list sha256:f97205bccf78dab4bbb29b2317ec7237ca94e838eac5964c6aead1da720660be 0.0s done
+#31 naming to docker.io/library/podtracker-backend:latest
+#31 naming to docker.io/library/podtracker-backend:latest done
+#31 unpacking to docker.io/library/podtracker-backend:latest 0.0s done
+#31 DONE 0.4s
+
+#32 [frontend] exporting to image
+#32 ...
+
+#33 [backend] resolving provenance for metadata file
+#33 DONE 0.0s
+
+#32 [frontend] exporting to image
+#32 exporting layers 0.8s done
+#32 exporting manifest sha256:aa3c9536dbecc67cbd11b03ad649aa3b21c56c98bff8d0abbe48b38c79a445bc
+#32 exporting manifest sha256:aa3c9536dbecc67cbd11b03ad649aa3b21c56c98bff8d0abbe48b38c79a445bc 0.0s done
+#32 exporting config sha256:df8939202b57597d587c24ad275afbcb0d17fc77fe5e4e022808b6df8755c18c 0.0s done
+#32 exporting attestation manifest sha256:6e8b867973f4db801074e2abae81140623c0dac70878b736e1413423faf1b46e 0.0s done
+#32 exporting manifest list sha256:40456590ff730d3009a0f7755318dcef90e4fccef8e95208b30e25514f23c009
+#32 exporting manifest list sha256:40456590ff730d3009a0f7755318dcef90e4fccef8e95208b30e25514f23c009 0.0s done
+#32 naming to docker.io/library/podtracker-frontend:latest done
+#32 unpacking to docker.io/library/podtracker-frontend:latest
+#32 unpacking to docker.io/library/podtracker-frontend:latest 0.2s done
+#32 DONE 1.2s
+
+#34 [frontend] resolving provenance for metadata file
+#34 DONE 0.0s
+[+] Running 6/6
+ ✔ podtracker-backend               Built                                                                                  0.0s 
+ ✔ podtracker-frontend              Built                                                                                  0.0s 
+ ✔ Container podtracker-db-1        Healthy                                                                                3.7s 
+ ✔ Container podtracker-backend-1   Started                                                                                4.0s 
+ ✔ Container podtracker-frontend-1  Started                                                                                3.5s 
+ ✔ Container podtracker-nginx-1     Running                                                                                0.0s 
 [ARCHITECT] PodTracker is now live.
-
----
-
-we are still getting 
-
-This page isn’t working
-localhost didn’t send any data.
-ERR_EMPTY_RESPONSE

@@ -1,45 +1,44 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-const Header = () => {
+const Header: React.FC = () => {
   const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
-    <header className="bg-gray-800 text-white p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold">
+    <header className="bg-gray-800 text-white shadow-md">
+      <nav className="container mx-auto px-4 py-3 flex justify-between items-center">
+        <Link to={isLoggedIn ? "/dashboard" : "/"} className="text-xl font-bold hover:text-gray-300">
           PodTracker
         </Link>
-        <nav>
-          <ul className="flex space-x-4">
-            {isLoggedIn ? (
-              <>
-                <li>
-                  <Link to="/decks">Decks</Link>
-                </li>
-                <li>
-                  <Link to="/pods">Pods</Link>
-                </li>
-                <li>
-                  <button onClick={logout} className="bg-red-500 px-3 py-1 rounded">
-                    Logout
-                  </button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
-                <li>
-                  <Link to="/register">Register</Link>
-                </li>
-              </>
-            )}
-          </ul>
-        </nav>
-      </div>
+        <div>
+          {isLoggedIn ? (
+            <>
+              <Link to="/dashboard" className="px-3 py-2 rounded hover:bg-gray-700">Dashboard</Link>
+              <Link to="/pods" className="px-3 py-2 rounded hover:bg-gray-700">Pods</Link>
+              <Link to="/decks" className="px-3 py-2 rounded hover:bg-gray-700">Decks</Link>
+              <Link to="/games" className="px-3 py-2 rounded hover:bg-gray-700">Games</Link>
+              <button
+                onClick={handleLogout}
+                className="ml-4 px-3 py-2 rounded bg-red-500 hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="px-3 py-2 rounded hover:bg-gray-700">Login</Link>
+              <Link to="/register" className="px-3 py-2 rounded hover:bg-gray-700">Register</Link>
+            </>
+          )}
+        </div>
+      </nav>
     </header>
   );
 };

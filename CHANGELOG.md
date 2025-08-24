@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Documentation:** Wrote Chapter 2, "Setting Up Your Development Environment," for `THE_PRIMER.md`.
+- **Documentation:** Wrote Chapter 1, "Introduction to PodTracker," for `THE_PRIMER.md`.
 - **Feature:** Implemented Minimum Viable Product (MVP) for PodTracker.
   - User authentication (registration, login, JWT-based).
   - Pod management (CRUD operations).
@@ -50,6 +52,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed 'Decks' to 'Games' across the frontend to align with backend entity.
 
 ### Fixed
+- **Deployment:** Resolved a port conflict with WSL by changing the application's exposed port from `8080` to `8000`.
+- **Frontend:** Corrected an `EISDIR` error by replacing the `frontend/index.html` directory with a file.
+- **Frontend:** Fixed a Vite configuration issue that prevented the frontend from being accessible within the Docker container.
 - Resolved TypeScript module resolution issues in test environment.
 - Corrected Zod schema syntax for validation.
 

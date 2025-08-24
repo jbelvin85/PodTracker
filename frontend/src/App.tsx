@@ -1,61 +1,43 @@
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import Header from './components/Header';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import GamesPage from './pages/GamesPage';
 import PodsPage from './pages/PodsPage';
 import DecksPage from './pages/DecksPage';
-import { AuthProvider, useAuth } from './hooks/useAuth';
+import LandingPage from './pages/LandingPage';
+import Layout from './components/Layout'; // New Layout
+import { AuthProvider, useAuth } from './hooks/useAuth.tsx';
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = () => {
   const { isLoggedIn } = useAuth();
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
-  return children;
+  return <Outlet />; // Render child routes
 };
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen bg-gray-100">
-          <Header />
-          <main className="container mx-auto p-4">
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              {/* Protected Routes */}
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <HomePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/games"
-                element={
-                  <ProtectedRoute>
-                    <GamesPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/pods"
-                element={
-                  <ProtectedRoute>
-                    <PodsPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/decks"
-                element={
-                  <ProtectedRoute>
-                    <DecksPage />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </main>
-        </div>
+        <Routes>
+          {/* Public routes that use their own full-page layout */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Protected routes that share the main application layout */}
+          <Route element={<Layout />}>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/games" element={<GamesPage />} />
+              <Route path="/pods" element={<PodsPage />} />
+              <Route path="/decks" element={<DecksPage />} />
+            </Route>
+          </Route>
+        </Routes>
       </AuthProvider>
     </Router>
   );

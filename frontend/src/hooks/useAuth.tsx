@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { token } = await res.json();
       localStorage.setItem('token', token);
       setIsLoggedIn(true);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err: any) {
       setError(err.message);
     }
