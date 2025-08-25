@@ -1,4 +1,5 @@
 #!/bin/sh
+set -ex # Exit immediately if a command exits with a non-zero status. Print commands and their arguments as they are executed.
 # The Architect: Ensuring the database is ready before migration.
 
 # Variables

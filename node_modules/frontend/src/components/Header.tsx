@@ -22,8 +22,8 @@ const Header: React.FC = () => {
             <>
               <Link to="/dashboard" className="px-3 py-2 rounded hover:bg-gray-700">Dashboard</Link>
               <Link to="/pods" className="px-3 py-2 rounded hover:bg-gray-700">Pods</Link>
-              <Link to="/decks" className="px-3 py-2 rounded hover:bg-gray-700">Decks</Link>
               <Link to="/games" className="px-3 py-2 rounded hover:bg-gray-700">Games</Link>
+              <Link to="/profile" className="px-3 py-2 rounded hover:bg-gray-700">Profile</Link> {/* New Profile Link */}
               <button
                 onClick={handleLogout}
                 className="ml-4 px-3 py-2 rounded bg-red-500 hover:bg-red-600"

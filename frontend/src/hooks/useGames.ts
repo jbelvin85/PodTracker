@@ -97,6 +97,7 @@ export const useGames = () => {
     }
   };
 
+
   return {
     games: data,
     isLoading: !data && !error,

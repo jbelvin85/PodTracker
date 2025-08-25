@@ -11,12 +11,15 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String   @unique
-  username  String   @unique
-  password  String   // Hashed password
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  email       String   @unique
+  username    String   @unique
+  password    String   // Hashed password
+  displayName String?
+  bio         String?
+  avatarUrl   String?
 
   // Relations
   ownedPods Pod[]    @relation("PodOwner")

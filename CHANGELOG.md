@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Configuration:** Implemented a centralized environment variable management system.
 - **Documentation:** Wrote Chapter 2, "Setting Up Your Development Environment," for `THE_PRIMER.md`.
 - **Documentation:** Wrote Chapter 1, "Introduction to PodTracker," for `THE_PRIMER.md`.
 - **Feature:** Implemented Minimum Viable Product (MVP) for PodTracker.
@@ -49,6 +50,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Configured Docker Compose for PostgreSQL database service.
 
 ### Changed
+- **Configuration:** Consolidated `.env.example` files into a single root `/.env.example`.
+- **Deployment:** Updated `docker-compose.yml` to use environment variables for database configuration and service ports, and to load service-specific `.env` files.
+- **Scripts:** Modified `setup.sh` and `setup.bat` to generate service-specific `.env` files (`backend/.env`, `frontend/.env`) from the root `.env`.
+- **Backend:** Implemented runtime environment variable validation using Zod in `backend/src/index.ts` and introduced `backend/src/schemas/envSchema.ts`.
 - Renamed 'Decks' to 'Games' across the frontend to align with backend entity.
 
 ### Fixed

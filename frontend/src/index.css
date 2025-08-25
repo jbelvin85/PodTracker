@@ -1,3 +1,195 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Light Theme Variables (Default) */
+:root {
+  --color-background: #3882b4;
+  --color-text-primary: #1a202c; /* Dark gray for primary text */
+  --color-text-secondary: #4a5568; /* Medium gray for secondary text */
+  --color-card-background: #3882b4;
+  --color-border: #e2e8f0;
+  --color-accent: #32CD32; /* Existing green accent */
+  --color-button-primary-bg: #32CD32;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #4a5568;
+  --color-button-secondary-text: #ffffff;
+  --color-input-bg: #edf2f7;
+  --color-input-border: #cbd5e0;
+}
+
+/* Dark Theme Variables */
+.dark {
+  --color-background: #1a202c; /* Dark background */
+  --color-text-primary: #e2e8f0; /* Light gray for primary text */
+  --color-text-secondary: #a0aec0; /* Medium light gray for secondary text */
+  --color-card-background: #2d3748; /* Slightly lighter dark for cards */
+  --color-border: #4a5568;
+  --color-accent: #32CD32; /* Keep existing green accent, ensure visibility */
+  --color-button-primary-bg: #32CD32;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #a0aec0;
+  --color-button-secondary-text: #1a202c;
+  --color-input-bg: #2d3748;
+  --color-input-border: #4a5568;
+}
+
+/* Golgari Theme */
+.theme-golgari {
+  --color-background: #263226; /* Dark earthy green/black */
+  --color-text-primary: #e0e0e0; /* Light text */
+  --color-text-secondary: #a0a0a0; /* Muted light text */
+  --color-card-background: #3a473a; /* Slightly lighter earthy tone for cards */
+  --color-border: #556b2f; /* Dark olive green */
+  --color-accent: #6b8e23; /* Olive green for accents */
+  --color-button-primary-bg: #6b8e23;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #4a554a;
+  --color-button-secondary-text: #e0e0e0;
+  --color-input-bg: #3a473a;
+  --color-input-border: #556b2f;
+}
+
+/* Jeskai Theme */
+.theme-jeskai {
+  --color-background: #f0f4f8; /* Light background, almost white */
+  --color-text-primary: #2c3e50; /* Dark blue/gray for primary text */
+  --color-text-secondary: #607d8b; /* Muted blue/gray for secondary text */
+  --color-card-background: #ffffff;
+  --color-border: #bbdefb; /* Light blue border */
+  --color-accent: #2196f3; /* Bright blue for accents */
+  --color-button-primary-bg: #e53935; /* Red for primary button */
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #90caf9; /* Light blue for secondary button */
+  --color-button-secondary-text: #2c3e50;
+  --color-input-bg: #e3f2fd;
+  --color-input-border: #90caf9;
+}
+
+/* Grixis Theme */
+.theme-grixis {
+  --color-background: #1a1a1a; /* Very dark background */
+  --color-text-primary: #e0e0e0; /* Light text */
+  --color-text-secondary: #a0a0a0; /* Muted light text */
+  --color-card-background: #2c2c2c; /* Slightly lighter dark for cards */
+  --color-border: #4a4a4a; /* Dark gray border */
+  --color-accent: #e53935; /* Bright red for accents */
+  --color-button-primary-bg: #e53935;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #4a4a4a;
+  --color-button-secondary-text: #e0e0e0;
+  --color-input-bg: #2c2c2c;
+  --color-input-border: #4a4a4a;
+}
+
+/* White Theme */
+.theme-white {
+  --color-background: #f8f8f8; /* Very light background */
+  --color-text-primary: #333333; /* Dark gray for primary text */
+  --color-text-secondary: #666666; /* Medium gray for secondary text */
+  --color-card-background: #ffffff;
+  --color-border: #cccccc;
+  --color-accent: #ffd700; /* Gold accent */
+  --color-button-primary-bg: #ffd700;
+  --color-button-primary-text: #333333;
+  --color-button-secondary-bg: #e0e0e0;
+  --color-button-secondary-text: #333333;
+  --color-input-bg: #f0f0f0;
+  --color-input-border: #cccccc;
+}
+
+/* Azorius Theme */
+.theme-azorius {
+  --color-background: #e6f0fa; /* Light blue-gray background */
+  --color-text-primary: #2c3e50; /* Dark blue-gray for primary text */
+  --color-text-secondary: #5a7d9a; /* Muted blue-gray for secondary text */
+  --color-card-background: #ffffff;
+  --color-border: #a7d9f2; /* Light blue border */
+  --color-accent: #3498db; /* Bright blue accent */
+  --color-button-primary-bg: #3498db;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #bbdefb;
+  --color-button-secondary-text: #2c3e50;
+  --color-input-bg: #f0f8ff;
+  --color-input-border: #a7d9f2;
+}
+
+/* Naya Theme */
+.theme-naya {
+  --color-background: #f5f5dc; /* Light earthy background */
+  --color-text-primary: #4b0000; /* Dark red-brown for primary text */
+  --color-text-secondary: #8b4513; /* Saddle brown for secondary text */
+  --color-card-background: #ffffff;
+  --color-border: #a0522d; /* Sienna border */
+  --color-accent: #228b22; /* Forest green accent */
+  --color-button-primary-bg: #dc143c; /* Crimson red for primary button */
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #9acd32; /* Yellow-green for secondary button */
+  --color-button-secondary-text: #4b0000;
+  --color-input-bg: #fffaf0;
+  --color-input-border: #a0522d;
+}
+
+/* Devoid Theme */
+.theme-devoid {
+  --color-background: #121212; /* Very dark almost black */
+  --color-text-primary: #e0e0e0; /* Light gray text */
+  --color-text-secondary: #a0a0a0; /* Muted gray text */
+  --color-card-background: #212121; /* Slightly lighter dark for cards */
+  --color-border: #424242; /* Dark gray border */
+  --color-accent: #8a2be2; /* Blue-violet accent (eerie glow) */
+  --color-button-primary-bg: #8a2be2;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #424242;
+  --color-button-secondary-text: #e0e0e0;
+  --color-input-bg: #212121;
+  --color-input-border: #424242;
+}
+
+/* Blue Theme */
+.theme-blue {
+  --color-background: #e0f2f7; /* Light blue background */
+  --color-text-primary: #01579b; /* Dark blue for primary text */
+  --color-text-secondary: #2962ff; /* Medium blue for secondary text */
+  --color-card-background: #ffffff;
+  --color-border: #81d4fa;
+  --color-accent: #2196f3; /* Bright blue accent */
+  --color-button-primary-bg: #2196f3;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #bbdefb;
+  --color-button-secondary-text: #01579b;
+  --color-input-bg: #e3f2fd;
+  --color-input-border: #81d4fa;
+}
+
+/* Black Theme */
+.theme-black {
+  --color-background: #1c1c1c; /* Very dark gray background */
+  --color-text-primary: #e0e0e0; /* Light gray for primary text */
+  --color-text-secondary: #a0a0a0; /* Muted light gray for secondary text */
+  --color-card-background: #2c2c2c; /* Slightly lighter dark for cards */
+  --color-border: #424242;
+  --color-accent: #7b1fa2; /* Dark purple accent (often associated with black) */
+  --color-button-primary-bg: #7b1fa2;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #424242;
+  --color-button-secondary-text: #e0e0e0;
+  --color-input-bg: #2c2c2c;
+  --color-input-border: #424242;
+}
+
+/* Red Theme */
+.theme-red {
+  --color-background: #ffebee; /* Very light red background */
+  --color-text-primary: #b71c1c; /* Dark red for primary text */
+  --color-text-secondary: #d32f2f; /* Medium red for secondary text */
+  --color-card-background: #ffffff;
+  --color-border: #ef9a9a;
+  --color-accent: #f44336; /* Bright red accent */
+  --color-button-primary-bg: #f44336;
+  --color-button-primary-text: #ffffff;
+  --color-button-secondary-bg: #ffcdd2;
+  --color-button-secondary-text: #b71c1c;
+  --color-input-bg: #ffebee;
+  --color-input-border: #ef9a9a;
+}

@@ -25,7 +25,6 @@ git clone <your-repo-url>
 cd podtracker
 
 # For Linux/macOS/WSL
-chmod +x ./scripts/*.sh
 ./scripts/setup.sh
 
 # For Windows PowerShell
@@ -63,7 +62,7 @@ The `scripts/` directory contains helpers for common development tasks:
 
 - **`./scripts/git-push.sh [base-branch]`**: Stages all changes, prompts for a commit message, and pushes the branch to the remote repository. It rebases onto the target branch (default: `main`) to ensure a clean history.
 - **`./scripts/git-pull.sh`**: An interactive script to be run on the server to pull the latest changes for a specific branch and restart the application.
-- **`./scripts/deploy.sh`**: A convenience script that runs `docker-compose up --build` for local development.
+- **`./scripts/deploy.sh`**: A convenience script that runs `docker compose up --build -d` to build and start all services in the background for local development.
 - **`./scripts/get_timestamp.sh` / `.ps1`**: Returns a standardized timestamp string (`YYYY-MM-DD-HH-MM-SS`) for use in other scripts.
 
 Make sure scripts are executable by running `chmod +x ./scripts/*.sh`.

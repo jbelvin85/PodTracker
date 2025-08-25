@@ -12,28 +12,47 @@ interface Deck {
 }
 
 const fetcher = async (url: string) => {
-  const token = localStorage.getItem('token');
-  const res = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-  if (!res.ok) {
-    throw new Error('Failed to fetch decks');
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      let errorBody = {};
+      try {
+        errorBody = await res.json();
+      } catch (jsonError) {
+        console.error('Failed to parse error response JSON:', jsonError);
+        errorBody = { message: res.statusText || 'Unknown error' };
+      }
+      console.error('API Error (Status:', res.status, '):', errorBody);
+      throw new Error(errorBody.message || 'Failed to fetch decks');
+    }
+
+    return res.json();
+  } catch (err) {
+    console.error('Network or Fetch Error:', err);
+    throw err; // Re-throw to allow useSWR to catch it
   }
-  return res.json();
 };
 
 export const useDecks = () => {
-  const { data, error, mutate } = useSWR<Deck[]>('/api/decks', fetcher);
+  console.log('useDecks: Initializing hook');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  const { data, error, mutate, isValidating } = useSWR<Deck[]>(`${API_BASE_URL}/decks`, fetcher);
+  console.log('useDecks: data:', data, 'error:', error, 'isValidating:', isValidating);
   const [loading, setLoading] = useState(false);
 
   const createDeck = async (deckData: Omit<Deck, 'id' | 'ownerId' | 'createdAt' | 'updatedAt'>) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/decks', {
+      const res = await fetch(`${API_BASE_URL}/decks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +75,7 @@ export const useDecks = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/decks/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/decks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +98,7 @@ export const useDecks = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/decks/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/decks/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

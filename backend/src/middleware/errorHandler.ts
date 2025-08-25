@@ -5,6 +5,9 @@ import { ZodError } from 'zod';
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   let error = err;
 
+  // Log the error for debugging purposes
+  console.error(error);
+
   if (error instanceof ZodError) {
     const message = error.errors.map(e => e.message).join(', ');
     error = new ApiError(400, message);
