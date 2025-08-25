@@ -7,7 +7,6 @@ yarn-error.log*
 
 # Environment variables
 .env
-.env.local
 
 # Build artifacts
 dist/
@@ -18,7 +17,6 @@ frontend/build/
 
 # Logs
 *.log
-new.log
 
 # Test coverage
 coverage/
@@ -33,15 +31,9 @@ frontend/coverage/
 .DS_Store
 
 # Old project files
+*.old
 old/
 .old.zip
 
 # Prisma
 prisma/migrations/
-.env
-*.old
-.env
-.env
-.env
-.env
-.env
