@@ -1,172 +1,125 @@
-PS D:\GitHub\podtracker> .\deploy.bat --build
-[ARCHITECT] Starting deployment sequence...
-[ARCHITECT] Installing dependencies for all services...
-[ARCHITECT] Installing backend dependencies...
-
-up to date, audited 720 packages in 4s
-
-123 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-[ARCHITECT] Applying database migrations...
-[+] Creating 1/1
- ✔ Container podtracker-db-1  Running                                                                                      0.0s 
-[ARCHITECT-MIGRATE] Waiting for database at db:5432...
-[ARCHITECT-MIGRATE] Database is up - executing command
-Environment variables loaded from .env
-Prisma schema loaded from prisma/schema.prisma
-Datasource "db": PostgreSQL database "podtracker_db", schema "public" at "db:5432"
-
-The database is already in sync with the Prisma schema.
-
-✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 111ms
-
-npm notice
-npm notice New major version of npm available! 10.8.2 -> 11.5.2
-npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.5.2
-npm notice To update run: npm install -g npm@11.5.2
-npm notice
-[ARCHITECT-MIGRATE] Migration complete.
-[ARCHITECT] Bringing services online...
+Select an option [1-12]: 1
+[ARCHITECT] Bringing services online with a fresh build...
 #1 [internal] load local bake definitions
 #1 reading from stdin 971B done
 #1 DONE 0.0s
 
-#2 [frontend internal] load build definition from Dockerfile
-#2 transferring dockerfile: 155B done
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 696B 0.0s done
 #2 DONE 0.0s
 
-#3 [backend internal] load build definition from Dockerfile
-#3 transferring dockerfile: 696B done
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 148B done
 #3 DONE 0.0s
 
-#4 [auth] library/node:pull token for registry-1.docker.io
-#4 DONE 0.0s
+#4 [frontend internal] load metadata for docker.io/library/node:20
+#4 DONE 0.4s
 
 #5 [backend internal] load metadata for docker.io/library/node:18-slim
-#5 DONE 0.5s
+#5 DONE 0.4s
 
-#6 [frontend internal] load metadata for docker.io/library/node:20
-#6 DONE 0.6s
+#6 [frontend internal] load .dockerignore
+#6 transferring context: 53B 0.0s done
+#6 DONE 0.0s
 
 #7 [backend internal] load .dockerignore
-#7 transferring context: 2B 0.0s done
+#7 transferring context: 2B done
 #7 DONE 0.0s
 
 #8 [backend internal] load build context
 #8 DONE 0.0s
 
-#9 [backend builder 1/7] FROM docker.io/library/node:18-slim@sha256:f9ab18e354e6855ae56ef2b290dd225c1e51a564f87584b9bd21dd651838830e
-#9 resolve docker.io/library/node:18-slim@sha256:f9ab18e354e6855ae56ef2b290dd225c1e51a564f87584b9bd21dd651838830e 0.0s done     
+#9 [frontend internal] load build context
+#9 transferring context: 1.71kB 0.0s done
 #9 DONE 0.0s
 
-#10 [frontend internal] load .dockerignore
-#10 transferring context: 2B done
+#10 [frontend 1/5] FROM docker.io/library/node:20@sha256:572a90df10a58ebb7d3f223d661d964a6c2383a9c2b5763162b4f631c53dc56a       
+#10 resolve docker.io/library/node:20@sha256:572a90df10a58ebb7d3f223d661d964a6c2383a9c2b5763162b4f631c53dc56a 0.1s done
 #10 DONE 0.1s
 
-#11 [frontend internal] load build context
-#11 transferring context: 25.25kB 0.0s done
+#11 [backend builder 1/7] FROM docker.io/library/node:18-slim@sha256:f9ab18e354e6855ae56ef2b290dd225c1e51a564f87584b9bd21dd651838830e
+#11 resolve docker.io/library/node:18-slim@sha256:f9ab18e354e6855ae56ef2b290dd225c1e51a564f87584b9bd21dd651838830e
+#11 resolve docker.io/library/node:18-slim@sha256:f9ab18e354e6855ae56ef2b290dd225c1e51a564f87584b9bd21dd651838830e 0.0s done
 #11 DONE 0.1s
 
-#12 [frontend 1/5] FROM docker.io/library/node:20@sha256:572a90df10a58ebb7d3f223d661d964a6c2383a9c2b5763162b4f631c53dc56a       
-#12 resolve docker.io/library/node:20@sha256:572a90df10a58ebb7d3f223d661d964a6c2383a9c2b5763162b4f631c53dc56a 0.1s done
-#12 DONE 0.1s
+#12 [frontend 2/5] WORKDIR /app
+#12 CACHED
 
-#13 [frontend 3/5] COPY package*.json ./
+#13 [frontend 4/5] RUN npm install
 #13 CACHED
 
-#14 [frontend 2/5] WORKDIR /app
+#14 [frontend 3/5] COPY package*.json ./
 #14 CACHED
 
-#15 [frontend 4/5] RUN npm install
+#15 [frontend 5/5] COPY . .
 #15 CACHED
 
 #8 [backend internal] load build context
-#8 transferring context: 345.44kB 0.2s done
-#8 DONE 0.2s
+#8 transferring context: 6.49kB 0.0s done
+#8 DONE 0.1s
 
-#16 [backend runner  8/10] COPY .env ./
+#16 [backend builder 2/7] WORKDIR /app
 #16 CACHED
 
-#17 [backend runner  3/10] RUN apt-get update && apt-get install -y -q openssl netcat-traditional && rm -rf /var/lib/apt/lists/*#17 CACHED
+#17 [backend builder 3/7] COPY package*.json ./
+#17 CACHED
 
-#18 [backend runner  7/10] COPY --from=builder /app/prisma ./prisma
+#18 [backend builder 4/7] COPY prisma ./prisma
 #18 CACHED
 
-#19 [backend runner  9/10] COPY migrate.sh ./migrate.sh
+#19 [backend builder 5/7] RUN npm install
 #19 CACHED
 
-#20 [backend builder 4/7] COPY prisma ./prisma
-#20 CACHED
+#20 [frontend] exporting to image
+#20 exporting layers done
+#20 exporting manifest sha256:24177164dfba11222e04764063da273ad40981e4c9eeb8e2a94c0c9188133a86 done
+#20 exporting config sha256:9809709ba96aba28af9eb5625ae3db35512271df1ae13508517b87e6ab9ff9bd 0.0s done
+#20 exporting attestation manifest sha256:8175b32f4d196f6a3e763211644a93a3eb143dcad0f2c0205bb01544d9036e17 0.0s done
+#20 exporting manifest list sha256:2219dbd70a824e3cebe874ae7ebc2207220814f16c0715380575f04cd2369ea3
+#20 exporting manifest list sha256:2219dbd70a824e3cebe874ae7ebc2207220814f16c0715380575f04cd2369ea3 0.0s done
+#20 naming to docker.io/library/podtracker-frontend:latest done
+#20 unpacking to docker.io/library/podtracker-frontend:latest 0.0s done
+#20 DONE 0.2s
 
-#21 [backend builder 5/7] RUN npm install
-#21 CACHED
+#21 [backend builder 6/7] COPY . .
+#21 DONE 0.3s
 
-#22 [backend runner  5/10] COPY --from=builder /app/node_modules ./node_modules
-#22 CACHED
+#22 [frontend] resolving provenance for metadata file
+#22 DONE 0.0s
 
-#23 [backend builder 2/7] WORKDIR /app
-#23 CACHED
+#23 [backend builder 7/7] RUN npm run build
+#23 0.479 
+#23 0.479 > backend@1.0.0 build
+#23 0.479 > tsc
+#23 0.479
+#23 DONE 4.0s
 
-#24 [backend builder 7/7] RUN npm run build
-#24 CACHED
+#24 [backend runner  3/10] RUN apt-get update && apt-get install -y -q openssl netcat-traditional && rm -rf /var/lib/apt/lists/*#24 CACHED
 
 #25 [backend runner  4/10] COPY --from=builder /app/package*.json ./
 #25 CACHED
 
-#26 [backend builder 3/7] COPY package*.json ./
-#26 CACHED
+#26 [backend runner  5/10] COPY --from=builder /app/node_modules ./node_modules
+#26 DONE 2.2s
 
-#27 [backend builder 6/7] COPY . .
-#27 CACHED
+#27 [backend runner  6/10] COPY --from=builder /app/dist ./dist
+#27 DONE 0.1s
 
-#28 [backend runner  6/10] COPY --from=builder /app/dist ./dist
-#28 CACHED
+#28 [backend runner  7/10] COPY --from=builder /app/prisma ./prisma
+#28 DONE 0.1s
 
-#29 [backend runner 10/10] RUN chmod +x ./migrate.sh
-#29 CACHED
+#29 [backend runner  8/10] COPY .env ./
+#29 DONE 0.0s
 
-#30 [frontend 5/5] COPY . .
-#30 DONE 0.2s
+#30 [backend runner  9/10] COPY migrate.sh ./migrate.sh
+#30 DONE 0.0s
 
-#31 [backend] exporting to image
-#31 exporting layers 0.0s done
-#31 exporting manifest sha256:ec52b12e7500470a772b4f0c9b2d4c9e064eac9155bb1d6b9ad99ffef5b53073 done
-#31 exporting config sha256:d0ab1bf9efbb688c13f3cd4e50b12fc2ad7162966178e2ff93bf03d12fb87966 done
-#31 exporting attestation manifest sha256:332e8db3fc3a7688cf68109db5167af76b21e5f2bb119a28250d058060356cab 0.1s done
-#31 exporting manifest list sha256:f97205bccf78dab4bbb29b2317ec7237ca94e838eac5964c6aead1da720660be 0.0s done
-#31 naming to docker.io/library/podtracker-backend:latest
-#31 naming to docker.io/library/podtracker-backend:latest done
-#31 unpacking to docker.io/library/podtracker-backend:latest 0.0s done
-#31 DONE 0.4s
+#31 [backend runner 10/10] RUN chmod +x ./migrate.sh
+#31 DONE 0.3s
 
-#32 [frontend] exporting to image
-#32 ...
-
-#33 [backend] resolving provenance for metadata file
-#33 DONE 0.0s
-
-#32 [frontend] exporting to image
-#32 exporting layers 0.8s done
-#32 exporting manifest sha256:aa3c9536dbecc67cbd11b03ad649aa3b21c56c98bff8d0abbe48b38c79a445bc
-#32 exporting manifest sha256:aa3c9536dbecc67cbd11b03ad649aa3b21c56c98bff8d0abbe48b38c79a445bc 0.0s done
-#32 exporting config sha256:df8939202b57597d587c24ad275afbcb0d17fc77fe5e4e022808b6df8755c18c 0.0s done
-#32 exporting attestation manifest sha256:6e8b867973f4db801074e2abae81140623c0dac70878b736e1413423faf1b46e 0.0s done
-#32 exporting manifest list sha256:40456590ff730d3009a0f7755318dcef90e4fccef8e95208b30e25514f23c009
-#32 exporting manifest list sha256:40456590ff730d3009a0f7755318dcef90e4fccef8e95208b30e25514f23c009 0.0s done
-#32 naming to docker.io/library/podtracker-frontend:latest done
-#32 unpacking to docker.io/library/podtracker-frontend:latest
-#32 unpacking to docker.io/library/podtracker-frontend:latest 0.2s done
-#32 DONE 1.2s
-
-#34 [frontend] resolving provenance for metadata file
-#34 DONE 0.0s
-[+] Running 6/6
- ✔ podtracker-backend               Built                                                                                  0.0s 
- ✔ podtracker-frontend              Built                                                                                  0.0s 
- ✔ Container podtracker-db-1        Healthy                                                                                3.7s 
- ✔ Container podtracker-backend-1   Started                                                                                4.0s 
- ✔ Container podtracker-frontend-1  Started                                                                                3.5s 
- ✔ Container podtracker-nginx-1     Running                                                                                0.0s 
-[ARCHITECT] PodTracker is now live.
+#32 [backend] exporting to image
+#32 exporting layers
+#32 exporting layers 10.9s done
+#32 exporting manifest sha256:06b81cb84f9a89a8eefd21143840d4ed1c2d1fa848414974cb9a219f37c4e9dc 0.0s done
+#32 exporting config sha256:44df3fc924f799e4e74e56a897b3967a5a951c03b7c0f8bad6662bcb0c80ec09 0.0s done
+#32 exporting attestation manifest sha256:f1f80e987f498c2e054f78afd1af0e0f627f28023fd1c9c8772e04d910ab6637 0.0s done

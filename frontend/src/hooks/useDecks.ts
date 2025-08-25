@@ -42,9 +42,8 @@ const fetcher = async (url: string) => {
 
 export const useDecks = () => {
   console.log('useDecks: Initializing hook');
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  const { data, error, mutate, isValidating } = useSWR<Deck[]>(`${API_BASE_URL}/decks`, fetcher);
+  const { data, error, mutate, isValidating } = useSWR<Deck[]>('/api/decks', fetcher);
   console.log('useDecks: data:', data, 'error:', error, 'isValidating:', isValidating);
   const [loading, setLoading] = useState(false);
 
@@ -52,7 +51,7 @@ export const useDecks = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${API_BASE_URL}/decks`, {
+      const res = await fetch('/api/decks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +74,7 @@ export const useDecks = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${API_BASE_URL}/decks/${id}`, {
+      const res = await fetch(`/api/decks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +97,7 @@ export const useDecks = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${API_BASE_URL}/decks/${id}`, {
+      const res = await fetch(`/api/decks/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

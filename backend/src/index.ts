@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import { z } from 'zod';
 import healthRoutes from './routes/health';
 import userRoutes from './routes/userRoutes';
 import deckRoutes from './routes/deckRoutes';

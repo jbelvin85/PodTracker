@@ -25,12 +25,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   const register = async (data: any) => {
     setError(null);
     try {
-      const res = await fetch(`${API_BASE_URL}/users`, {
+      const res = await fetch('/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (data: any) => {
     setError(null);
     try {
-      const res = await fetch(`${API_BASE_URL}/login`, {
+      const res = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

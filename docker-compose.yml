@@ -59,7 +59,7 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "8000:80" # Listen on 8000 to avoid conflicts
+      - "${APP_PORT:-8000}:80" # Listen on APP_PORT (default 8000) to avoid conflicts
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
