@@ -42,3 +42,4 @@ prisma/migrations/
 *.old
 .env
 .env
+.env
